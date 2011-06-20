@@ -1,4 +1,4 @@
-file /home/linus/ORR-Irr/SConstruct,line 4:
+file /home/marius/orr/SConstruct,line 4:
 	Configure(confdir = .sconf_temp)
 scons: Configure: Checking for C library Irrlicht... 
 scons: Configure: ".sconf_temp/conftest_0.c" is up to date.
