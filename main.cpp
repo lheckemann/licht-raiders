@@ -5,7 +5,9 @@
 #include "ConfigFile.h"
 #include "event.h"
 
-#ifdef WINDOWS
+#ifdef _IRR_WINDOWS_
+#pragma comment(lib, "Irrlicht.lib")
+#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #include <windows.h>
 #define Pass(ms) Sleep(ms) 
 #else
