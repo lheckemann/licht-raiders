@@ -18,7 +18,7 @@ env.ParseConfig('pkg-config zlib --cflags')
 env.ParseConfig('pkg-config zlib --libs')
 
 import getpass
-if getpass.getuser() == "linus":
+if getpass.getuser() == "linus" or getpass.getuser() == "marius":
 	env.Append(CPPFLAGS=['-I/usr/local/include/irrlicht'])
 env.Append(CXXFLAGS=['-g', '-Wall'])
 env.Replace(CXX=['clang++'])
