@@ -55,7 +55,9 @@ int main() {
 	ISceneManager* smgr = device->getSceneManager();
 	IGUIEnvironment* guienv = device->getGUIEnvironment();
 
-	ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0, 8, -2), vector3df(0, 0, 0));
+	ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0, 10, -2), vector3df(0, 0, 0));
+	cam->setFarValue(42000.0f);
+
 
 /* Set up lighting */
 	std::vector<ILightSceneNode*> lights;
@@ -72,10 +74,15 @@ int main() {
 
 /* Set up skybox */
 
-	std::string _skyboxFilename (MainConfig.read<std::string>("skybox", ""));
+	const std::string _skyboxFilename (MainConfig.read<std::string>("skybox", ""));
 	const irr::io::path skyboxFilename (_skyboxFilename.c_str());
 	ITexture *sb_tex = driver->getTexture(skyboxFilename);
 	smgr->addSkyBoxSceneNode(sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, sb_tex);
+
+/* Load cube */
+
+	IMesh *cubeMesh = smgr->getMesh("data/models/cube.dae");
+	IMeshSceneNode *cube = smgr->addMeshSceneNode(cubeMesh);
 
 
 /* T-Minus ten! */
