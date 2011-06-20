@@ -24,19 +24,28 @@ using namespace gui;
 
 
 IrrlichtDevice *setupDevice(EventReceiver &receiver) {
-	if (IrrlichtDevice::isDriverSupported(EDT_OPENGL)) {
-		return createDevice(EDT_OPENGL, dimension2d<u32>(640, 480), 32, false, false, false, &receiver);
+	SIrrlichtCreationParameters params = SIrrlichtCreationParameters();
+	if (IrrlichtDevice::isDriverSupported(EDT_OPENGL)) {	
+		params.DriverType = EDT_OPENGL;
 	}
 	else if (IrrlichtDevice::isDriverSupported(EDT_DIRECT3D9)) {
-		return createDevice(EDT_DIRECT3D9, dimension2d<u32>(640, 480), 32, false, false, false, &receiver);
+		params.DriverType = EDT_DIRECT3D9;
 	}
 	else if (IrrlichtDevice::isDriverSupported(EDT_DIRECT3D8)) {
-		return createDevice(EDT_DIRECT3D8, dimension2d<u32>(640, 480), 32, false, false, false, &receiver);
+		params.DriverType = EDT_DIRECT3D8;
 	}
 	else {
 		printf("No suitable video driver found.\n");
 		return NULL;
 	}
+	
+	params.WindowSize = dimension2d<u32>(640, 480); //Todo: read from config
+	params.Bits = 32;
+	params.Fullscreen = false;
+	params.Stencilbuffer = false;
+	params.Doublebuffer = false;
+	params.EventReceiver = &receiver;
+	return createDeviceEx(params);
 }
 
 
