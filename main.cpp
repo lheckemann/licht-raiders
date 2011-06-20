@@ -49,7 +49,7 @@ int main() {
 		printf("Could not create device.\n");
 	}
 
-	device->setWindowCaption(L"This is going to be a cool program someday.");
+	device->setWindowCaption(L"IrrRR");
 
 	IVideoDriver* driver = device->getVideoDriver();
 	ISceneManager* smgr = device->getSceneManager();
@@ -91,6 +91,9 @@ int main() {
 	float now = 0;
 	float lastUpdate = 0;
 	int frame = 0;
+	vector3df camMove(0, 0, 0);
+	vector3df camPos = cam->getPosition();
+	vector3df camTarget = cam->getTarget();
 /* We have liftoff! */
 	while (device->run()) {
 		now = timer->getTime();
@@ -103,6 +106,25 @@ int main() {
 			guienv->drawAll();
 
 			driver->endScene();
+
+// TODO: Read keys from config
+			camMove.set(0, 0, 0);
+			if (receiver.IsKeyPressed(KEY_KEY_W)) {
+				camMove.Z = 0.5;
+			}
+			if (receiver.IsKeyPressed(KEY_KEY_S)) {
+				camMove.Z = -0.5;
+			}
+			if (receiver.IsKeyPressed(KEY_KEY_D)) {
+				camMove.X = 0.5;
+			}
+			if (receiver.IsKeyPressed(KEY_KEY_A)) {
+				camMove.X = -0.5;
+			}
+			camPos += camMove;
+			camTarget += camMove;
+			cam->setPosition(camPos);
+			cam->setTarget(camTarget);
 
 			if(receiver.IsKeyPressed(KEY_ESCAPE)) break;
 		}
