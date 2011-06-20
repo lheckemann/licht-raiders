@@ -1,0 +1,75 @@
+file /home/linus/ORR-Irr/SConstruct,line 4:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for C library Irrlicht... 
+scons: Configure: ".sconf_temp/conftest_0.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_0.c <-
+  |  |
+  |  |
+  |  |
+  |  |int
+  |  |main() {
+  |  |  
+  |  |return 0;
+  |  |}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_0.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_0.o -c .sconf_temp/conftest_0.c
+  |
+scons: Configure: ".sconf_temp/conftest_0" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_0 .sconf_temp/conftest_0.o -lIrrlicht
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: Checking for C library z... 
+scons: Configure: ".sconf_temp/conftest_1.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_1.c <-
+  |  |
+  |  |
+  |  |
+  |  |int
+  |  |main() {
+  |  |  
+  |  |return 0;
+  |  |}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_1.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_1.o -c .sconf_temp/conftest_1.c
+  |
+scons: Configure: ".sconf_temp/conftest_1" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_1 .sconf_temp/conftest_1.o -lIrrlicht -lz
+  |
+scons: Configure: (cached) yes
+
+scons: Configure: Checking for C library tinyxml... 
+scons: Configure: ".sconf_temp/conftest_2.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_2.c <-
+  |  |
+  |  |
+  |  |
+  |  |int
+  |  |main() {
+  |  |  
+  |  |return 0;
+  |  |}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_2.o" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_2.o -c .sconf_temp/conftest_2.c
+  |
+scons: Configure: ".sconf_temp/conftest_2" is up to date.
+scons: Configure: The original builder output was:
+  |gcc -o .sconf_temp/conftest_2 .sconf_temp/conftest_2.o -lIrrlicht -lz -ltinyxml
+  |
+scons: Configure: (cached) yes
+
+
