@@ -29,5 +29,6 @@ SConscript('TmxParser/SConscript')
 
 ConfigFile = env.Object('ConfigFile.cpp')
 event = env.Object("event.cpp")
+enttype = env.Object("enttype.cpp")
 
-env.Program('IrrRR', ['main.cpp'] + event + ConfigFile)
+env.Program('IrrRR', ['main.cpp'] + event + ConfigFile + enttype)

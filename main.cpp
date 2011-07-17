@@ -4,6 +4,7 @@
 #include <vector>
 #include "ConfigFile.h"
 #include "event.h"
+#include "enttype.h"
 
 #ifdef _IRR_WINDOWS_
 #pragma comment(lib, "Irrlicht.lib")
@@ -23,6 +24,16 @@ using namespace scene;
 using namespace video;
 using namespace io;
 using namespace gui;
+
+
+std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while(std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
 
 
 IrrlichtDevice *setupDevice(EventReceiver &receiver) {
@@ -95,6 +106,18 @@ int main() {
 	IMesh *cubeMesh = smgr->getMesh("data/models/cube.dae");
 	IMeshSceneNode *cube = smgr->addMeshSceneNode(cubeMesh);
 
+/* Load entity types */
+
+	std::vector<EntityType> entTypes;
+	std::string _entTypeNames (MainConfig.read<std::string>("enttypes", ""));
+	std::vector<std::string> &entTypeNames;
+	split(_entTypeNames, ',', entTypeNames);
+	std::vector<std::string>::iterator i;
+	for (i = entTypeNames->begin(); i < entTypeNames->end(); i++) { // Create entity types
+		EntityType e (*i, &MainConfig);
+		entTypes.push_back(e);
+		delete e;
+	}
 
 /* T-Minus ten! */
 	ITimer* timer = device->getTimer(); 
