@@ -35,8 +35,7 @@ std::vector<std::string> &split(const std::string &s, char delim, std::vector<st
     return elems;
 }
 
-
-IrrlichtDevice *setupDevice(EventReceiver &receiver) {
+IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 	SIrrlichtCreationParameters params = SIrrlichtCreationParameters();
 	if (IrrlichtDevice::isDriverSupported(EDT_OPENGL)) {	
 		params.DriverType = EDT_OPENGL;
@@ -52,7 +51,7 @@ IrrlichtDevice *setupDevice(EventReceiver &receiver) {
 		return NULL;
 	}
 	
-	params.WindowSize = dimension2d<u32>(640, 480); //Todo: read from config
+	params.WindowSize = dimension2d<u32>(UserConfig->read<int>("window_width", 640), UserConfig->read<int>("window_height", 480));
 	params.Bits = 32;
 	params.Fullscreen = false;
 	params.Stencilbuffer = false;
@@ -62,11 +61,20 @@ IrrlichtDevice *setupDevice(EventReceiver &receiver) {
 }
 
 
+typedef struct {
+	EKEY_CODE cam_up;
+	EKEY_CODE cam_down;
+	EKEY_CODE cam_left;
+	EKEY_CODE cam_right;
+} controls;
+
+
 int main() {
 	EventReceiver receiver;
 	ConfigFile MainConfig = ConfigFile("data/config/main.cfg");
+	ConfigFile UserConfig = ConfigFile("data/config/user.cfg");
 
-	IrrlichtDevice *device = setupDevice(receiver);
+	IrrlichtDevice *device = setupDevice(receiver, &UserConfig);
 	if (!device) {
 		printf("Could not create device.\n");
 	}
@@ -80,6 +88,17 @@ int main() {
 	ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0, 10, -2), vector3df(0, 0, 0));
 	cam->setFarValue(42000.0f);
 
+	controls userControls;
+
+	char cam_up = UserConfig.read<char>("keys.camera_up", KEY_KEY_W);
+	char cam_down = UserConfig.read<char>("keys.camera_down", KEY_KEY_S);
+	char cam_left = UserConfig.read<char>("keys.camera_left", KEY_KEY_A);
+	char cam_right = UserConfig.read<char>("keys.camera_right", KEY_KEY_D);
+
+	userControls.cam_up = (EKEY_CODE) cam_up;
+	userControls.cam_down = (EKEY_CODE) cam_down;
+	userControls.cam_left = (EKEY_CODE) cam_left;
+	userControls.cam_right = (EKEY_CODE) cam_right;
 
 /* Set up lighting */
 	std::vector<ILightSceneNode*> lights;
@@ -114,7 +133,6 @@ int main() {
 	split(_entTypeNames, ',', entTypeNames);
 	std::vector<std::string>::iterator i;
 	for (i = entTypeNames.begin(); i < entTypeNames.end(); i++) { // Create entity types
-//		EntityType e (*i, &MainConfig);
 		entTypes.push_back(EntityType::EntityType(*i, &MainConfig));
 	}
 
@@ -142,16 +160,16 @@ int main() {
 
 // TODO: Read keys from config
 			camMove.set(0, 0, 0);
-			if (receiver.IsKeyPressed(KEY_KEY_W)) {
+			if (receiver.IsKeyPressed(userControls.cam_up)) {
 				camMove.Z = 0.5;
 			}
-			if (receiver.IsKeyPressed(KEY_KEY_S)) {
+			if (receiver.IsKeyPressed(userControls.cam_down)) {
 				camMove.Z = -0.5;
 			}
-			if (receiver.IsKeyPressed(KEY_KEY_D)) {
+			if (receiver.IsKeyPressed(userControls.cam_left)) {
 				camMove.X = 0.5;
 			}
-			if (receiver.IsKeyPressed(KEY_KEY_A)) {
+			if (receiver.IsKeyPressed(userControls.cam_right)) {
 				camMove.X = -0.5;
 			}
 			camPos += camMove;
