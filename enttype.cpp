@@ -17,44 +17,17 @@ EntityType::EntityType() {
 
 EntityType::EntityType(std::string name, ConfigFile *cfg) {
 	typeName = name;
-	hp = cfg->read<int>(name + ".hp");
-	try {
-		travelMask = cfg->read<int>(name + ".travelMask");
-	}
-	catch (ConfigFile::key_not_found) {
-		travelMask = 0;
-	}
-	try {
-		drillPower = cfg->read<int>(name + ".drillPower");
-	}
-	catch (ConfigFile::key_not_found) {
-		drillPower = -1; // Cannot drill
-	}
-	try {
-		drillSpeed = cfg->read<int>(name + ".drillSpeed");
-	}
-	catch (ConfigFile::key_not_found) {
-		drillSpeed = -1; // Cannot drill
-	}
-	try {
-		mobile = cfg->read<bool>(name + ".mobile");
-	}
-	catch (ConfigFile::key_not_found) {
-		mobile = 0;
-	}
-	try {
-		userControlled = cfg->read<bool>(name + ".isUnit");
-	}
-	catch (ConfigFile::key_not_found) {
-		userControlled = 0;
-	}
+	usable = true;
+	hp = cfg->read<int>(name + ".hp", 100);
+	travelMask = cfg->read<int>(name + ".travelMask", 0);
+	drillPower = cfg->read<int>(name + ".drillPower", -1);
+	drillSpeed = cfg->read<int>(name + ".drillSpeed", -1);
+	mobile = cfg->read<bool>(name + ".mobile", false);
+	userControlled = cfg->read<bool>(name + ".isUnit", false);
+	modelFilename = cfg->read<std::string>(name + ".model", "");
+
 	std::string _AIType;
-	try {
-		_AIType = cfg->read<std::string>(name + ".AIType");
-	}
-	catch (ConfigFile::key_not_found) {
-		_AIType = "NONE";
-	}
+	_AIType = cfg->read<std::string>(name + ".AIType", "NONE");
 	if (_AIType == "MONSTER") {
 		AIType = MONSTER;
 	}
@@ -71,5 +44,4 @@ EntityType::EntityType(std::string name, ConfigFile *cfg) {
 		std::cout << "Unsupported AI Type: " << _AIType << "\nFalling back to NONE.\n";
 		AIType = NONE;
 	}
-	usable = true;
 }

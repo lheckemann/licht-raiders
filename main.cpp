@@ -110,13 +110,12 @@ int main() {
 
 	std::vector<EntityType> entTypes;
 	std::string _entTypeNames (MainConfig.read<std::string>("enttypes", ""));
-	std::vector<std::string> &entTypeNames;
+	std::vector<std::string> entTypeNames;
 	split(_entTypeNames, ',', entTypeNames);
 	std::vector<std::string>::iterator i;
-	for (i = entTypeNames->begin(); i < entTypeNames->end(); i++) { // Create entity types
-		EntityType e (*i, &MainConfig);
-		entTypes.push_back(e);
-		delete e;
+	for (i = entTypeNames.begin(); i < entTypeNames.end(); i++) { // Create entity types
+//		EntityType e (*i, &MainConfig);
+		entTypes.push_back(EntityType::EntityType(*i, &MainConfig));
 	}
 
 /* T-Minus ten! */
