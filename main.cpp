@@ -88,8 +88,8 @@ int main() {
 
 	ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0, 10, -2), vector3df(0, 0, 0));
 	cam->setFarValue(42000.0f);
-	cam->setPosition(core::vector3df(2700*2,255*2,2600*2));
-    cam->setTarget(core::vector3df(2397*2,343*2,2700*2));
+	cam->setPosition(core::vector3df(0,2048,0));
+    cam->setTarget(core::vector3df(0,0,0));
     cam->setFarValue(42000.0f);
 
 	controls userControls;
@@ -175,16 +175,16 @@ int main() {
 
 			camMove.set(0, 0, 0);
 			if (receiver.IsKeyPressed(userControls.cam_up)) {
-				camMove.Z = 0.5;
+				camMove.Z = 3;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_down)) {
-				camMove.Z = -0.5;
+				camMove.Z = -3;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_left)) {
-				camMove.X = -0.5;
+				camMove.X = -3;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_right)) {
-				camMove.X = 0.5;
+				camMove.X = 3;
 			}
 			camPos = cam->getPosition();
 			camTarget = cam->getTarget();
