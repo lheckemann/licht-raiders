@@ -95,11 +95,6 @@ int main() {
 	userControls.cam_left = (EKEY_CODE) UserConfig.read<int>("keys.camera_left", KEY_KEY_A);
 	userControls.cam_right = (EKEY_CODE) UserConfig.read<int>("keys.camera_right", KEY_KEY_D);
 
-/*	userControls.cam_up = (EKEY_CODE) cam_up;
-	userControls.cam_down = (EKEY_CODE) cam_down;
-	userControls.cam_left = (EKEY_CODE) cam_left;
-	userControls.cam_right = (EKEY_CODE) cam_right;*/
-
 /* Set up lighting */
 	std::vector<ILightSceneNode*> lights;
 
@@ -158,7 +153,6 @@ int main() {
 
 			driver->endScene();
 
-// TODO: Read keys from config
 			camMove.set(0, 0, 0);
 			if (receiver.IsKeyPressed(userControls.cam_up)) {
 				camMove.Z = 0.5;
@@ -172,6 +166,8 @@ int main() {
 			if (receiver.IsKeyPressed(userControls.cam_right)) {
 				camMove.X = 0.5;
 			}
+			camPos = cam->getPosition();
+			camTarget = cam->getTarget();
 			camPos += camMove;
 			camTarget += camMove;
 			cam->setPosition(camPos);
