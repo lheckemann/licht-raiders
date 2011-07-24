@@ -89,7 +89,7 @@ int main() {
 	ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0, 10, -2), vector3df(0, 0, 0));
 	cam->setFarValue(42000.0f);
 	cam->setPosition(core::vector3df(0,2048,0));
-    cam->setTarget(core::vector3df(0,0,0));
+    cam->setTarget(core::vector3df(1024,0,0));
     cam->setFarValue(42000.0f);
 
 	controls userControls;
