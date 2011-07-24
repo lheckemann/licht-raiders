@@ -90,15 +90,15 @@ int main() {
 
 	controls userControls;
 
-	char cam_up = UserConfig.read<char>("keys.camera_up", KEY_KEY_W);
-	char cam_down = UserConfig.read<char>("keys.camera_down", KEY_KEY_S);
-	char cam_left = UserConfig.read<char>("keys.camera_left", KEY_KEY_A);
-	char cam_right = UserConfig.read<char>("keys.camera_right", KEY_KEY_D);
+	userControls.cam_up = (EKEY_CODE) UserConfig.read<int>("keys.camera_up", KEY_KEY_W);
+	userControls.cam_down = (EKEY_CODE) UserConfig.read<int>("keys.camera_down", KEY_KEY_S);
+	userControls.cam_left = (EKEY_CODE) UserConfig.read<int>("keys.camera_left", KEY_KEY_A);
+	userControls.cam_right = (EKEY_CODE) UserConfig.read<int>("keys.camera_right", KEY_KEY_D);
 
-	userControls.cam_up = (EKEY_CODE) cam_up;
+/*	userControls.cam_up = (EKEY_CODE) cam_up;
 	userControls.cam_down = (EKEY_CODE) cam_down;
 	userControls.cam_left = (EKEY_CODE) cam_left;
-	userControls.cam_right = (EKEY_CODE) cam_right;
+	userControls.cam_right = (EKEY_CODE) cam_right;*/
 
 /* Set up lighting */
 	std::vector<ILightSceneNode*> lights;
@@ -167,10 +167,10 @@ int main() {
 				camMove.Z = -0.5;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_left)) {
-				camMove.X = 0.5;
+				camMove.X = -0.5;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_right)) {
-				camMove.X = -0.5;
+				camMove.X = 0.5;
 			}
 			camPos += camMove;
 			camTarget += camMove;
