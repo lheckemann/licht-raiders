@@ -100,9 +100,9 @@ int main() {
 
 	for (int i = 0; i<8; i++) {
 		vector3df pos ( 
-			((i & 1) != 0)*128-64,
-			((i & 2) != 0)*128-64,
-			((i & 4) != 0)*128-64
+			(float)((i & 1) != 0)*128-64,
+			(float)((i & 2) != 0)*128-64,
+			(float)((i & 4) != 0)*128-64
 		);
 		lights.push_back(smgr->addLightSceneNode(cam, pos));
 	}
@@ -134,8 +134,8 @@ int main() {
 /* T-Minus ten! */
 	ITimer* timer = device->getTimer(); 
 	timer->setTime(0);
-	float now = 0;
-	float lastUpdate = 0;
+	unsigned int now = 0;
+	unsigned int lastUpdate = 0;
 	int frame = 0;
 	vector3df camMove(0, 0, 0);
 	vector3df camPos = cam->getPosition();
