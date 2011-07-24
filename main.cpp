@@ -5,6 +5,7 @@
 #include "ConfigFile.h"
 #include "event.h"
 #include "enttype.h"
+#include <ITerrainSceneNode.h>
 
 #ifdef _IRR_WINDOWS_
 #pragma comment(lib, "Irrlicht.lib")
@@ -87,6 +88,9 @@ int main() {
 
 	ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0, 10, -2), vector3df(0, 0, 0));
 	cam->setFarValue(42000.0f);
+	cam->setPosition(core::vector3df(2700*2,255*2,2600*2));
+    cam->setTarget(core::vector3df(2397*2,343*2,2700*2));
+    cam->setFarValue(42000.0f);
 
 	controls userControls;
 
@@ -120,6 +124,22 @@ int main() {
 	IMesh *cubeMesh = smgr->getMesh("data/models/cube.dae");
 	IMeshSceneNode *cube = smgr->addMeshSceneNode(cubeMesh);
 
+    scene::ITerrainSceneNode* terrain = smgr->addTerrainSceneNode(
+            "height.png",
+            0,                                      // parent node
+            -1,                                     // node id
+            core::vector3df(0.f, 0.f, 0.f),         // position
+            core::vector3df(0.f, 0.f, 0.f),         // rotation
+            core::vector3df(40.f, 4.4f, 40.f),      // scale
+            video::SColor ( 255, 255, 255, 255 ),   // vertexColor
+            5,                                      // maxLOD
+            scene::ETPS_17,                         // patchSize
+            4                                       // smoothFactor
+            );
+	terrain->setMaterialFlag(video::EMF_LIGHTING, false);
+	terrain->setMaterialTexture(0,
+                        driver->getTexture("maptex.png"));
+	terrain->setDebugDataVisible ( true );
 /* Load entity types */
 
 	std::vector<EntityType> entTypes;
