@@ -67,7 +67,6 @@ typedef struct {
 
 int main() {
 	EventReceiver receiver;
-	ConfigFile MainConfig = ConfigFile("data/config/main.cfg");
 	ConfigFile UserConfig = ConfigFile("data/config/user.cfg");
 
 	IrrlichtDevice *device = setupDevice(receiver, &UserConfig);
@@ -109,8 +108,7 @@ int main() {
 
 /* Set up skybox */
 
-	const std::string _skyboxFilename (MainConfig.read<std::string>("skybox", ""));
-	const io::path skyboxFilename (_skyboxFilename.c_str());
+	const io::path skyboxFilename ("data/textures/skybox/top.png");
 	video::ITexture *sb_tex = driver->getTexture(skyboxFilename);
 	smgr->addSkyBoxSceneNode(sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, sb_tex);
 
@@ -135,16 +133,6 @@ int main() {
 	terrain->setMaterialTexture(0,
                         driver->getTexture("maptex.png"));
 	terrain->setDebugDataVisible ( true );
-/* Load entity types */
-
-	std::vector<EntityType> entTypes;
-	std::string _entTypeNames (MainConfig.read<std::string>("enttypes", ""));
-	std::vector<std::string> entTypeNames;
-	split(_entTypeNames, ',', entTypeNames);
-	std::vector<std::string>::iterator i;
-	for (i = entTypeNames.begin(); i < entTypeNames.end(); i++) { // Create entity types
-		entTypes.push_back(EntityType(*i, &MainConfig));
-	}
 
 /* T-Minus ten! */
 	ITimer* timer = device->getTimer(); 

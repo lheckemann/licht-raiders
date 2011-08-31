@@ -3,7 +3,7 @@
 env = Environment()
 conf = Configure(env)
 
-LIBS=['Irrlicht', 'z', 'tinyxml']
+LIBS=['Irrlicht', 'z']
 
 for lib in LIBS:
     if not conf.CheckLib(lib):
@@ -12,8 +12,6 @@ for lib in LIBS:
 
 env = conf.Finish()
 
-env.ParseConfig('pkg-config tinyxml --cflags')
-env.ParseConfig('pkg-config tinyxml --libs')
 env.ParseConfig('pkg-config zlib --cflags')
 env.ParseConfig('pkg-config zlib --libs')
 
@@ -25,9 +23,6 @@ elif os.path.isdir("/usr/include/irrlicht"):
 
 env.Append(CXXFLAGS=['-g', '-Wall'])
 #env.Replace(CXX=['clang++'])
-
-Export('env')
-SConscript('TmxParser/SConscript')
 
 ConfigFile = env.Object('ConfigFile.cpp')
 event = env.Object("event.cpp")
