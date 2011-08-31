@@ -2,7 +2,6 @@
 #include <irrlicht.h>
 
 using namespace irr;
-using namespace io;
 
 class EventReceiver : public IEventReceiver
 {
