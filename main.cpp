@@ -143,7 +143,7 @@ int main() {
 	split(_entTypeNames, ',', entTypeNames);
 	std::vector<std::string>::iterator i;
 	for (i = entTypeNames.begin(); i < entTypeNames.end(); i++) { // Create entity types
-		entTypes.push_back(EntityType::EntityType(*i, &MainConfig));
+		entTypes.push_back(EntityType(*i, &MainConfig));
 	}
 
 /* T-Minus ten! */

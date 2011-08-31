@@ -17,14 +17,14 @@ env.ParseConfig('pkg-config tinyxml --libs')
 env.ParseConfig('pkg-config zlib --cflags')
 env.ParseConfig('pkg-config zlib --libs')
 
-import getpass
-if getpass.getuser() in ("linus", "marius"):
+import os
+if os.path.isdir("/usr/local/include/irrlicht"):
 	env.Append(CPPFLAGS=['-I/usr/local/include/irrlicht'])
-if getpass.getuser() == "birgit":
+elif os.path.isdir("/usr/include/irrlicht"):
 	env.Append(CPPFLAGS=['-I/usr/include/irrlicht'])
 
 env.Append(CXXFLAGS=['-g', '-Wall'])
-env.Replace(CXX=['clang++'])
+#env.Replace(CXX=['clang++'])
 
 Export('env')
 SConscript('TmxParser/SConscript')

@@ -1,6 +1,0 @@
-#!/usr/bin/python -c "pass"
-
-Import('env')
-
-base64 = env.Object('base64.cpp')
-Export('base64')
