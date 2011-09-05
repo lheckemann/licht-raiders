@@ -46,7 +46,7 @@ IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 		return NULL;
 	}
 	
-	params.WindowSize = core::dimension2d<u32>(UserConfig->read<int>("window_width", 640), UserConfig->read<int>("window_height", 480));
+	params.WindowSize = core::dimension2d<u32>(UserConfig->read<int>("window_width", 800), UserConfig->read<int>("window_height", 600));
 	params.Bits = 32;
 	params.Fullscreen = false;
 	params.Stencilbuffer = false;
@@ -66,7 +66,17 @@ typedef struct {
 
 int main() {
 	EventReceiver receiver;
-	ConfigFile UserConfig = ConfigFile("data/config/user.cfg");
+	ConfigFile UserConfig;
+	try {
+		UserConfig = ConfigFile("data/config/user.cfg");
+	}
+	catch (ConfigFile::file_not_found) {
+		printf("No user config file found, creating...\n");
+		FILE *f;
+		f = fopen("data/config/user.cfg", "w");
+		fclose(f);
+		UserConfig = ConfigFile("data/config/user.cfg");
+	}
 
 	IrrlichtDevice *device = setupDevice(receiver, &UserConfig);
 	if (!device) {
