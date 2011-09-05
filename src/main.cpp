@@ -4,7 +4,6 @@
 #include <vector>
 #include "ConfigFile.h"
 #include "event.h"
-#include "enttype.h"
 
 #ifdef _IRR_WINDOWS_
 #pragma comment(lib, "Irrlicht.lib")
@@ -82,8 +81,8 @@ int main() {
 
 	scene::ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0, 10, -2), vector3df(0, 0, 0));
 	cam->setFarValue(42000.0f);
-	cam->setPosition(core::vector3df(0,2048,0));
-    cam->setTarget(core::vector3df(2048,0,0));
+	cam->setPosition(core::vector3df(-3,8,0));
+    cam->setTarget(core::vector3df(0,0,0));
     cam->setFarValue(42000.0f);
 
 	controls userControls;
@@ -96,13 +95,16 @@ int main() {
 /* Set up lighting */
 	std::vector<scene::ILightSceneNode*> lights;
 
+#define asdf 0.5
+#define asdfg asdf/2
 	for (int i = 0; i<8; i++) {
 		vector3df pos ( 
-			(float)((i & 1) != 0)*128-64,
-			(float)((i & 2) != 0)*128-64,
-			(float)((i & 4) != 0)*128-64
+			(float)((i & 1) != 0)*asdf-asdfg,
+			(float)((i & 2) != 0)*asdf-asdfg,
+			(float)((i & 4) != 0)*asdf-asdfg
 		);
-		lights.push_back(smgr->addLightSceneNode(cam, pos));
+		pos += vector3df(500, 500, 500);
+		lights.push_back(smgr->addLightSceneNode(NULL, pos));
 	}
 
 
@@ -116,23 +118,7 @@ int main() {
 
 	scene::IMesh *cubeMesh = smgr->getMesh("data/models/cube.dae");
 	scene::IMeshSceneNode *cube = smgr->addMeshSceneNode(cubeMesh);
-
-    scene::ITerrainSceneNode* terrain = smgr->addTerrainSceneNode(
-            "height.png",
-            0,                                      // parent node
-            -1,                                     // node id
-            core::vector3df(0.f, 0.f, 0.f),         // position
-            core::vector3df(0.f, 0.f, 0.f),         // rotation
-            core::vector3df(40.f, 4.4f, 40.f),      // scale
-            video::SColor ( 255, 255, 255, 255 ),   // vertexColor
-            5,                                      // maxLOD
-            scene::ETPS_17,                         // patchSize
-            4                                       // smoothFactor
-            );
-	terrain->setMaterialFlag(video::EMF_LIGHTING, true);
-	terrain->setMaterialTexture(0,
-                        driver->getTexture("maptex.png"));
-	terrain->setDebugDataVisible ( true );
+	cube -> setMaterialFlag(video::EMF_LIGHTING, true);
 
 /* T-Minus ten! */
 	ITimer* timer = device->getTimer(); 
@@ -158,16 +144,16 @@ int main() {
 
 			camMove.set(0, 0, 0);
 			if (receiver.IsKeyPressed(userControls.cam_up)) {
-				camMove.X = 8;
+				camMove.X = 0.1;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_down)) {
-				camMove.X = -8;
+				camMove.X = -0.1;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_left)) {
-				camMove.Z = 8;
+				camMove.Z = 0.1;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_right)) {
-				camMove.Z = -8;
+				camMove.Z = -0.1;
 			}
 			camPos = cam->getPosition();
 			camTarget = cam->getTarget();

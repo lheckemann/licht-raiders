@@ -1,9 +1,12 @@
 #!/usr/bin/python -c "pass"
+# ^ Trick for syntax highlighting in gedit...
 
 env = Environment()
 conf = Configure(env)
 
 LIBS=['Irrlicht', 'z']
+
+SConscript("scons_exglob.py")
 
 for lib in LIBS:
     if not conf.CheckLib(lib):
@@ -24,8 +27,7 @@ elif os.path.isdir("/usr/include/irrlicht"):
 env.Append(CXXFLAGS=['-g', '-Wall'])
 #env.Replace(CXX=['clang++'])
 
-ConfigFile = env.Object('ConfigFile.cpp')
-event = env.Object("event.cpp")
-enttype = env.Object("enttype.cpp")
+Export('env')
+Export('Glob')
 
-env.Program('IrrRR', ['main.cpp'] + event + ConfigFile + enttype)
+SConscript("src/SConscript")

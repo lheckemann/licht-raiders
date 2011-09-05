@@ -1,0 +1,9 @@
+#!/usr/bin/python -c "pass"
+# ^ Trick for syntax highlighting in gedit...
+
+Import("env")
+Import("exglob")
+
+Ents = exglob("*.cpp", excludes = ["Unit.cpp", "Vehicle.cpp", "Building.cpp", "Monster.cpp"])
+
+Export('Ents')

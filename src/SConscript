@@ -1,0 +1,12 @@
+#!/usr/bin/python -c "pass"
+# ^ Trick for syntax highlighting in gedit...
+
+Import('env')
+
+ConfigFile = env.Object('ConfigFile.cpp')
+event = env.Object("event.cpp")
+
+SConscript("entity/SConscript")
+Import('Ents')
+
+env.Program('../IrrRR', ['main.cpp'] + event + ConfigFile + Ents)
