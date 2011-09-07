@@ -67,6 +67,9 @@ typedef struct {
 int main() {
 	EventReceiver receiver;
 	ConfigFile UserConfig;
+	
+	//TODO: OS-specific config file locations (~/.openrr-irr, %APPDATA%/OpenRR-Irr, etc.)
+	/* How to do this? Preprocessor macros - #ifdef WIN32 etc? */
 	try {
 		UserConfig = ConfigFile("data/config/user.cfg");
 	}
