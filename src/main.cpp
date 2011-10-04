@@ -63,8 +63,21 @@ typedef struct {
 	EKEY_CODE cam_right;
 } controls;
 
+std::string get_data_path() {
+#ifdef __unix
+	string result ( getenv("HOME") );
+	result += "/.IrrRR/"; // TODO: Is this ok?
+#else // __unix
+#ifdef __WIN32__ 
+	string result ( getenv("APPDATA") );
+	result += "\\IrrRR\\"
+#endif // __WIN32__
+#endif // __unix
+	return result;
+}
 
 int main() {
+	printf((get_data_path() + "\n").c_str());
 	EventReceiver receiver;
 	ConfigFile UserConfig;
 	
