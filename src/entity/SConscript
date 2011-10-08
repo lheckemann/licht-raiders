@@ -4,6 +4,8 @@
 Import("env")
 Import("exglob")
 
+
+#Unit = env.Object()
 Ents = exglob("*.cpp", excludes = ["Unit.cpp", "Vehicle.cpp", "Building.cpp", "Monster.cpp"])
 
 Export('Ents')

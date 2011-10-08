@@ -1,28 +1,55 @@
 #include "map.h"
 
-Tile::Tile(uint8_t _type, uint8_t _height) {
-	type = _type;
-	height = _height;
-}
+#include <iostream>
+#include <cassert>
 
 void Map::load(FILE* map) {
-	int width, height;
-	uint32_t type, height, point;
+	Tile t;
+	uint32_t type, tileheight, point;
 	uint8_t tilesize, field;
+	uint8_t check[4] = "  ";
+//	uint16_t version;
+	fread(&check, 1, 2, map);
+//	fread(&version, 2, 1, map);
+	std::cout << check << "\n";
+	assert(check == "RR");
+//	assert(version == 1);
 	fread(&width, 4, 1, map);
 	fread(&height, 4, 1, map);
-	for (int i = 0; i < width*height; i++;) { // For every tile
+	for (int i = 0; i < width*height; i++) { // For every tile
 		fread(&tilesize, 1, 1, map); // Read number of fields in tile
 		for (int j = 0; j < tilesize; j++) { // For every field in the current tile
 			fread(&field, 1, 1, map); // Read field type
+			t.type = 0;
+			t.height = 0;
+			t.point = 0;
 			switch(field) { // Decide on field type and read into appropriate variable
 				case 0: fread(&type, 4, 1, map); break; // Field type 0 = tile type
-				case 1: fread(&height, 4, 1, map); break; // Field type 1 = tile height
+				case 1: fread(&tileheight, 4, 1, map); break; // Field type 1 = tile height
 				case 2: fread(&point, 4, 1, map); break; // Field type 2 = tile number for scripting
 //				case 3: fread(&asdf, 1, 1, map); break; // Field type 3 = ????
 				default: fseek(map, 4, SEEK_CUR); // Skip the value of the field if its type is unknown
 			}
+			t.type = type;
+			t.height = tileheight;
+			t.point = point;
+			tiles.push_back(t);
 		}
 	}
 }
 
+int main () {
+	Map map;
+	FILE* f;
+	f = fopen("test.map", "rb");
+	map.load(f);
+	std::vector<Tile>::iterator it = map.tiles.begin();
+	int x, y;
+	for(x = 0; x<map.width ; x++) {
+		for (y = 0; y<map.height; y++) {
+			std::cout << it->type;
+			it++;
+		}
+		std::cout << "\n";
+	}
+}
