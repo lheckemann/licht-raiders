@@ -8,11 +8,11 @@ void Map::load(FILE* map) {
 	uint32_t type, tileheight, point;
 	uint8_t tilesize, field;
 	uint8_t check[4] = "  ";
-//	uint16_t version;
+	uint16_t version;
 	fread(&check, 1, 2, map);
-//	fread(&version, 2, 1, map);
+	fread(&version, 2, 1, map);
 	std::cout << check << "\n";
-	assert(check == "RR");
+//	assert(check == "RR");
 //	assert(version == 1);
 	fread(&width, 4, 1, map);
 	fread(&height, 4, 1, map);
@@ -47,7 +47,7 @@ int main () {
 	int x, y;
 	for(x = 0; x<map.width ; x++) {
 		for (y = 0; y<map.height; y++) {
-			std::cout << it->type;
+			std::cout << it->type << "\t";
 			it++;
 		}
 		std::cout << "\n";
