@@ -80,7 +80,6 @@ std::string get_userdata_path() {
 }
 
 int main() {
-	printf((get_userdata_path() + "\n").c_str());
 	EventReceiver receiver;
 	ConfigFile UserConfig;
 	
@@ -123,7 +122,7 @@ int main() {
 /* Set up lighting */
 	std::vector<scene::ILightSceneNode*> lights;
 
-#define asdf 0.5
+#define asdf 500
 #define asdfg asdf/2
 	for (int i = 0; i<8; i++) {
 		vector3df pos ( 
@@ -131,7 +130,6 @@ int main() {
 			(float)((i & 2) != 0)*asdf-asdfg,
 			(float)((i & 4) != 0)*asdf-asdfg
 		);
-		pos += vector3df(500, 500, 500);
 		lights.push_back(smgr->addLightSceneNode(NULL, pos));
 	}
 
