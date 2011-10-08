@@ -33,8 +33,9 @@ void Map::load(FILE* map) {
 			t.type = type;
 			t.height = tileheight;
 			t.point = point;
-			tiles.push_back(t);
+			
 		}
+		tiles.push_back(t);
 	}
 }
 
