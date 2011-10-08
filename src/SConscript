@@ -10,4 +10,4 @@ Map = env.Object("map.cpp")
 SConscript("entity/SConscript")
 Import('Ents')
 
-env.Program('../IrrRR', ['main.cpp'] + event + ConfigFile)
+env.Program('../IrrRR', ['main.cpp'] + event + ConfigFile + Map)

@@ -1,6 +1,5 @@
 #include "map.h"
 
-#include <iostream>
 #include <cassert>
 
 void Map::load(FILE* map) {
@@ -11,14 +10,13 @@ void Map::load(FILE* map) {
 	uint16_t version;
 	fread(&check, 1, 2, map);
 	fread(&version, 2, 1, map);
-	std::cout << check << "\n";
-//	assert(check == "RR");
+//	assert(check == "RR"); // TODO check magic and version!
 //	assert(version == 1);
 	fread(&width, 4, 1, map);
 	fread(&height, 4, 1, map);
-	for (int i = 0; i < width*height; i++) { // For every tile
+	for (unsigned int i = 0; i < width*height; i++) { // For every tile
 		fread(&tilesize, 1, 1, map); // Read number of fields in tile
-		for (int j = 0; j < tilesize; j++) { // For every field in the current tile
+		for (unsigned int j = 0; j < tilesize; j++) { // For every field in the current tile
 			fread(&field, 1, 1, map); // Read field type
 			t.type = 0;
 			t.height = 0;
@@ -33,12 +31,13 @@ void Map::load(FILE* map) {
 			t.type = type;
 			t.height = tileheight;
 			t.point = point;
-			
 		}
 		tiles.push_back(t);
 	}
 }
 
+#if UNIT_TEST
+#include <iostream>
 int main () {
 	Map map;
 	FILE* f;
@@ -54,3 +53,4 @@ int main () {
 		std::cout << "\n";
 	}
 }
+#endif

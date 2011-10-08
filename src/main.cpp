@@ -2,8 +2,11 @@
 #include <string>
 #include <ctime>
 #include <vector>
+#include <boost/filesystem.hpp>
+
 #include "ConfigFile.h"
 #include "event.h"
+
 
 #ifdef _IRR_WINDOWS_
 #pragma comment(lib, "Irrlicht.lib")
@@ -63,35 +66,34 @@ typedef struct {
 	EKEY_CODE cam_right;
 } controls;
 
-std::string get_data_path() {
+std::string get_userdata_path() {
 #ifdef __unix
 	string result ( getenv("HOME") );
 	result += "/.IrrRR/"; // TODO: Is this ok?
 #else // __unix
 #ifdef __WIN32__ 
 	string result ( getenv("APPDATA") );
-	result += "\\IrrRR\\"
+	result += "\\IrrRR\\";
 #endif // __WIN32__
 #endif // __unix
 	return result;
 }
 
 int main() {
-	printf((get_data_path() + "\n").c_str());
+	printf((get_userdata_path() + "\n").c_str());
 	EventReceiver receiver;
 	ConfigFile UserConfig;
 	
-	//TODO: OS-specific config file locations (~/.openrr-irr, %APPDATA%/OpenRR-Irr, etc.)
-	/* How to do this? Preprocessor macros - #ifdef WIN32 etc? */
 	try {
-		UserConfig = ConfigFile("data/config/user.cfg");
+		UserConfig = ConfigFile(get_userdata_path() + "user.cfg");
 	}
 	catch (ConfigFile::file_not_found) {
 		printf("No user config file found, creating...\n");
+		boost::filesystem::create_directories(get_userdata_path());
 		FILE *f;
-		f = fopen("data/config/user.cfg", "w");
+		f = fopen((get_userdata_path() + "user.cfg").c_str(), "w");
 		fclose(f);
-		UserConfig = ConfigFile("data/config/user.cfg");
+		UserConfig = ConfigFile(get_userdata_path() + "user.cfg");
 	}
 
 	IrrlichtDevice *device = setupDevice(receiver, &UserConfig);

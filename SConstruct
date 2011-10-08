@@ -4,7 +4,7 @@
 env = Environment()
 conf = Configure(env)
 
-LIBS=['Irrlicht', 'z']
+LIBS=['Irrlicht', 'boost_filesystem']
 
 SConscript("scons_exglob.py")
 
@@ -15,9 +15,6 @@ for lib in LIBS:
 
 env = conf.Finish()
 
-env.ParseConfig('pkg-config zlib --cflags')
-env.ParseConfig('pkg-config zlib --libs')
-
 import os
 if os.path.isdir("/usr/local/include/irrlicht"):
 	env.Append(CPPFLAGS=['-I/usr/local/include/irrlicht'])
@@ -25,6 +22,7 @@ elif os.path.isdir("/usr/include/irrlicht"):
 	env.Append(CPPFLAGS=['-I/usr/include/irrlicht'])
 
 env.Append(CXXFLAGS=['-g', '-Wall'])
+
 #env.Replace(CXX=['clang++'])
 
 Export('env')
