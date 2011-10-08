@@ -91,6 +91,10 @@ int main() {
 		boost::filesystem::create_directories(get_userdata_path());
 		FILE *f;
 		f = fopen((get_userdata_path() + "user.cfg").c_str(), "w");
+		if (f == NULL) {
+			printf("Could not create user config file. Aborting. Please check that the path to the user config file is available: %s", (get_userdata_path() + "user.cfg").c_str());
+			exit(-1);
+		}
 		fclose(f);
 		UserConfig = ConfigFile(get_userdata_path() + "user.cfg");
 	}
