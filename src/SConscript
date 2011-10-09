@@ -6,8 +6,8 @@ Import('env')
 ConfigFile = env.Object('ConfigFile.cpp')
 event = env.Object("event.cpp")
 Map = env.Object("map.cpp")
-
+scriptmanager = env.Object("scriptmanager.cpp")
 SConscript("entity/SConscript")
 Import('Ents')
 
-env.Program('../IrrRR', ['main.cpp'] + event + ConfigFile + Map)
+env.Program('../IrrRR', ['main.cpp'] + event + ConfigFile + Map + scriptmanager)
