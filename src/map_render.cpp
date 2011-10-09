@@ -14,10 +14,9 @@ void calculate_render(Map* map) {
 	mapCoords surround_coords[9];
 	int surround_indexes[9];
 	bool surround_walls[9];
-	
-	
+
 	for (i = map->tiles.begin(); i != map->tiles.end(); i++) {
-		coords = get_coords_at_index(i - map->tiles.begin());
+		current = get_coords_at_index(i - map->tiles.begin());
 		
 		//	calculate surrounding coordinates
 		surround_coords = {
