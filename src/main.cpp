@@ -6,7 +6,6 @@
 
 #include "ConfigFile.h"
 #include "event.h"
-#include "scriptmanager.h"
 
 
 #ifdef _IRR_WINDOWS_
@@ -124,8 +123,6 @@ int main() {
 	userControls.cam_left = (EKEY_CODE) UserConfig.read<int>("keys.camera_left", KEY_KEY_A);
 	userControls.cam_right = (EKEY_CODE) UserConfig.read<int>("keys.camera_right", KEY_KEY_D);
 
-/* scriptmanager */
-    ScriptManager *scriptmanager = new ScriptManager();
 /* Set up lighting */
 	std::vector<scene::ILightSceneNode*> lights;
 
@@ -169,7 +166,7 @@ int main() {
 			frame++;
 			lastUpdate = now;
 			driver->beginScene(true, true, SColor(255, 0, 0, 0));
-            scriptmanager->update(frame);
+
 			smgr->drawAll();
 			guienv->drawAll();
 

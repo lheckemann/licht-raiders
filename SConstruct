@@ -4,7 +4,7 @@
 env = Environment()
 conf = Configure(env)
 
-LIBS=['Irrlicht', 'boost_filesystem','lua5.1','luabind']
+LIBS=['Irrlicht', 'boost_filesystem']
 
 SConscript("scons_exglob.py")
 
@@ -21,7 +21,6 @@ if os.path.isdir("/usr/local/include/irrlicht"):
 elif os.path.isdir("/usr/include/irrlicht"):
 	env.Append(CPPFLAGS=['-I/usr/include/irrlicht'])
 
-env.Append(CPPFLAGS=['-I/usr/include/lua5.1/'])
 env.Append(CXXFLAGS=['-g', '-Wall'])
 
 #env.Replace(CXX=['clang++'])
