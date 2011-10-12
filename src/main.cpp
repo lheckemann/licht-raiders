@@ -4,8 +4,9 @@
 #include <vector>
 #include <boost/filesystem.hpp>
 
-#include "ConfigFile.h"
-#include "event.h"
+#include "globs.h"
+#include "map_render.h"
+#include "map.h"
 
 
 #ifdef _IRR_WINDOWS_
@@ -25,13 +26,24 @@ using core::vector3df;
 using video::SColor;
 
 /*std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
-    std::stringstream ss(s);
-    std::string item;
-    while(std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
+	std::stringstream ss(s);
+	std::string item;
+	while(std::getline(ss, item, delim)) {
+		elems.push_back(item);
+	}
+	return elems;
 }*/
+
+
+
+EventReceiver receiver;
+ConfigFile UserConfig;
+
+video::IVideoDriver* driver;
+scene::ISceneManager* smgr;
+gui::IGUIEnvironment* guienv;
+
+
 
 IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 	SIrrlichtCreationParameters params = SIrrlichtCreationParameters();
@@ -80,9 +92,6 @@ std::string get_userdata_path() {
 }
 
 int main() {
-	EventReceiver receiver;
-	ConfigFile UserConfig;
-	
 	try {
 		UserConfig = ConfigFile(get_userdata_path() + "user.cfg");
 	}
@@ -106,15 +115,23 @@ int main() {
 
 	device->setWindowCaption(L"IrrRR");
 
-	video::IVideoDriver* driver = device->getVideoDriver();
-	scene::ISceneManager* smgr = device->getSceneManager();
-	gui::IGUIEnvironment* guienv = device->getGUIEnvironment();
+	driver = device->getVideoDriver();
+	smgr = device->getSceneManager();
+	guienv = device->getGUIEnvironment();
 
 	scene::ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0, 10, -2), vector3df(0, 0, 0));
 	cam->setFarValue(42000.0f);
 	cam->setPosition(core::vector3df(-3,8,0));
-    cam->setTarget(core::vector3df(0,0,0));
-    cam->setFarValue(42000.0f);
+	cam->setTarget(core::vector3df(0,0,0));
+	cam->setFarValue(42000.0f);
+
+	load_textures();
+	FILE *mapfile;
+	mapfile = fopen("src/test.map", "rb");
+	Map *map = new Map;
+	map->load(mapfile);
+	fclose(mapfile);
+	calculate_render(map);
 
 	controls userControls;
 
