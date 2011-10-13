@@ -6,6 +6,7 @@ std::vector<video::ITexture*> wallTextures;
 
 scene::IMesh *wallMesh;
 scene::IMesh *groundMesh;
+std::vector<scene::IMeshSceneNode*> tileSceneNodes;
 
 void load_textures() {
 	io::path path;
@@ -29,14 +30,14 @@ void calculate_render(Map* map) {
 
 	for (i = map->tiles.begin(); i != map->tiles.end(); i++) {
 //		current = get_coords_at_index(i - map->tiles.begin(), *&map); // TODO fix get_coords_at_index macro
-		current.x = map->width % index;
-		current.y = map->width / index;
+		current.x = index % map->width;
+		current.y = index / map->width;
 
 		if (tile_is_wall[i - map->tiles.begin()]) {
-			sceneNode = smgr->addMeshSceneNode(wallMesh);
+			tileSceneNodes.push_back( smgr->addMeshSceneNode(wallMesh, 0, -1, vector3df(current.x, 0, current.y)) );
 		}
 		else {
-			sceneNode = smgr->addMeshSceneNode(groundMesh);
+			tileSceneNodes.push_back( smgr->addMeshSceneNode(groundMesh, 0, -1, vector3df(current.x, 0, current.y)) );
 		}
 		sceneNode->setMaterialTexture(0, wallTextures[i - map->tiles.begin()]);
 		sceneNode->setMaterialType(video::EMT_SOLID);
