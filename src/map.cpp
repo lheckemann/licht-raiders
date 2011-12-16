@@ -10,7 +10,7 @@ void Map::load(FILE* map) {
 	uint16_t version;
 	fread(&check, 1, 2, map);
 	fread(&version, 2, 1, map);
-//	assert(check == "RR"); // TODO check magic and version!
+	assert(strcmp(check, "RR") == 0);
 //	assert(version == 1);
 	fread(&width, 4, 1, map);
 	fread(&height, 4, 1, map);
