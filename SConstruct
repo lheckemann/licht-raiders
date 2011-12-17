@@ -22,7 +22,7 @@ elif os.path.isdir("/usr/include/irrlicht"):
 	env.Append(CPPFLAGS=['-I/usr/include/irrlicht'])
 
 env.Append(CXXFLAGS=['-g', '-Wall'])
-
+#env.Append(CPPFLAGS=['-DBE_POLITE'])
 #env.Replace(CXX=['clang++'])
 
 Export('env')

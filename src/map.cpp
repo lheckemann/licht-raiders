@@ -52,6 +52,9 @@ void Map::load_textures() {
 	for (unsigned i = 0; i < sizeof(texture_names)/sizeof(std::string); i++) {
 		path = ("data/textures/tile/" + texture_names[i] + ".png").c_str();
 		wallTextures.push_back(driver->getTexture(path));
+		if (*(wallTextures.end()) == NULL) {
+		    bork("Couldn't load a texture");
+		}
 	}
 	wallMesh = smgr->getMesh("data/models/wall.obj");
 	groundMesh = smgr->getMesh("data/models/ground.obj");
@@ -60,6 +63,7 @@ void Map::load_textures() {
 
 #define index (i - tiles.begin())
 void Map::calculate_render() {
+    load_textures();
 	std::vector<Tile>::iterator i;
 	mapCoords current;
 	current.x = 0;

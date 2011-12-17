@@ -24,17 +24,6 @@ using namespace irr;
 using core::vector3df;
 using video::SColor;
 
-/*std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
-	std::stringstream ss(s);
-	std::string item;
-	while(std::getline(ss, item, delim)) {
-		elems.push_back(item);
-	}
-	return elems;
-}*/
-
-
-
 EventReceiver receiver;
 ConfigFile UserConfig;
 
@@ -42,6 +31,15 @@ video::IVideoDriver* driver;
 scene::ISceneManager* smgr;
 gui::IGUIEnvironment* guienv;
 
+// I couldn't resist, alright? :D
+void bork(char* msg) {
+#ifndef BE_POLITE
+    printf("SHIT! %s!\n", msg);
+#else
+    printf("%s, aborting.\n", msg);
+#endif
+    exit(-1);
+}
 
 
 IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
@@ -127,8 +125,7 @@ int main() {
 	FILE *mapfile;
 	mapfile = fopen("data/maps/test.map", "rb");
 	if (mapfile == NULL) {
-        printf("Could not open test map.");
-        exit(-1);
+        bork("Could not open test map");
 	}
 	Map *map = new Map;
 	map->load(mapfile);

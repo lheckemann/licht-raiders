@@ -9,3 +9,5 @@ extern ConfigFile UserConfig;
 extern video::IVideoDriver* driver;
 extern scene::ISceneManager* smgr;
 extern gui::IGUIEnvironment* guienv;
+
+extern void bork(char*);
