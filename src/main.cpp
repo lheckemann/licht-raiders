@@ -63,6 +63,7 @@ IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 	params.Fullscreen = false;
 	params.Stencilbuffer = false;
 	params.Doublebuffer = true;
+	params.Vsync = true;
 	params.EventReceiver = &receiver;
 	return createDeviceEx(params);
 }
