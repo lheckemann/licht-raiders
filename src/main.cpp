@@ -13,7 +13,7 @@
 #pragma comment(lib, "Irrlicht.lib")
 #pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #include <windows.h>
-#define Pass(ms) Sleep(ms) 
+#define Pass(ms) Sleep(ms)
 #else
 #include <unistd.h>
 #define Pass(ms) usleep(ms*1000)
