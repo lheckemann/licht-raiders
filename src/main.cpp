@@ -62,7 +62,7 @@ IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 	params.Bits = 32;
 	params.Fullscreen = false;
 	params.Stencilbuffer = false;
-	params.Doublebuffer = false;
+	params.Doublebuffer = true;
 	params.EventReceiver = &receiver;
 	return createDeviceEx(params);
 }
@@ -73,6 +73,8 @@ struct controls {
 	EKEY_CODE cam_down;
 	EKEY_CODE cam_left;
 	EKEY_CODE cam_right;
+	EKEY_CODE cam_raise;
+	EKEY_CODE cam_lower;
 };
 
 std::string get_userdata_path() {
@@ -137,6 +139,9 @@ int main() {
 	userControls.cam_down = (EKEY_CODE) UserConfig.read<int>("keys.camera_down", KEY_KEY_S);
 	userControls.cam_left = (EKEY_CODE) UserConfig.read<int>("keys.camera_left", KEY_KEY_A);
 	userControls.cam_right = (EKEY_CODE) UserConfig.read<int>("keys.camera_right", KEY_KEY_D);
+	userControls.cam_raise = (EKEY_CODE) UserConfig.read<int>("keys.camera_raise", KEY_KEY_Q);
+	userControls.cam_lower = (EKEY_CODE) UserConfig.read<int>("keys.camera_lower", KEY_KEY_E);
+
 
 /* Set up lighting */
 	std::vector<scene::ILightSceneNode*> lights;
@@ -193,6 +198,12 @@ int main() {
 			}
 			if (receiver.IsKeyPressed(userControls.cam_right)) {
 				camMove.Z = -0.1;
+			}
+			if (receiver.IsKeyPressed(userControls.cam_raise)) {
+				camMove.Y = 0.1;
+			}
+			if (receiver.IsKeyPressed(userControls.cam_lower)) {
+				camMove.Y = -0.1;
 			}
 			camPos = cam->getPosition();
 			camTarget = cam->getTarget();
