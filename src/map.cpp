@@ -52,7 +52,7 @@ void Map::load_textures() {
 	for (unsigned i = 0; i < sizeof(texture_names)/sizeof(std::string); i++) {
 		path = ("data/textures/tile/" + texture_names[i] + ".png").c_str();
 		wallTextures.push_back(driver->getTexture(path));
-		if (*(wallTextures.end()) == NULL) {
+		if (*(wallTextures.end()-1) == NULL) {
 		    bork((path + " could not be loaded").c_str());
 		}
 	}
