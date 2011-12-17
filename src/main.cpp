@@ -58,9 +58,9 @@ IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 		return NULL;
 	}
 
-	params.WindowSize = core::dimension2d<u32>(UserConfig->read<int>("window_width", 800), UserConfig->read<int>("window_height", 600));
+	params.WindowSize = core::dimension2d<u32>(UserConfig->read<int>("display.width", 800), UserConfig->read<int>("display.height", 600));
 	params.Bits = 32;
-	params.Fullscreen = false;
+	params.Fullscreen = UserConfig->read<bool>("display.fullscreen", false);
 	params.Stencilbuffer = false;
 	params.Doublebuffer = true;
 	params.Vsync = true;
