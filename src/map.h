@@ -22,7 +22,6 @@ extern scene::IMesh *wallMesh;
 extern scene::IMesh *groundMesh;
 extern std::vector<scene::IMeshSceneNode*> tileSceneNodes;
 
-
 struct Tile{
 	uint32_t type;
 	uint32_t height;

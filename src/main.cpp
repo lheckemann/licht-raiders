@@ -32,11 +32,11 @@ scene::ISceneManager* smgr;
 gui::IGUIEnvironment* guienv;
 
 // I couldn't resist, alright? :D
-void bork(char* msg) {
+void bork(std::string msg) {
 #ifndef BE_POLITE
-    printf("SHIT! %s!\n", msg);
+    printf("SHIT! %s!\n", msg.c_str());
 #else
-    printf("%s, aborting.\n", msg);
+    printf("%s, aborting.\n", msg.c_str());
 #endif
     exit(-1);
 }

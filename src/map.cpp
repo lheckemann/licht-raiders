@@ -53,7 +53,7 @@ void Map::load_textures() {
 		path = ("data/textures/tile/" + texture_names[i] + ".png").c_str();
 		wallTextures.push_back(driver->getTexture(path));
 		if (*(wallTextures.end()) == NULL) {
-		    bork("Couldn't load a texture");
+		    bork((path + " could not be loaded").c_str());
 		}
 	}
 	wallMesh = smgr->getMesh("data/models/wall.obj");
