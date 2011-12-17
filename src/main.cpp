@@ -159,12 +159,6 @@ int main() {
 	video::ITexture *sb_tex = driver->getTexture(skyboxFilename);
 	smgr->addSkyBoxSceneNode(sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, sb_tex);
 
-/* Load cube */
-
-	scene::IMesh *cubeMesh = smgr->getMesh("data/models/cube.dae");
-	scene::IMeshSceneNode *cube = smgr->addMeshSceneNode(cubeMesh);
-	cube -> setMaterialFlag(video::EMF_LIGHTING, true);
-
 /* T-Minus ten! */
 	ITimer* timer = device->getTimer();
 	timer->setTime(0);

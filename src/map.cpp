@@ -79,13 +79,15 @@ void Map::calculate_render() {
 		current.y = index / width;
 
 		if (tile_is_wall[i - tiles.begin()]) {
-			tileSceneNodes.push_back( smgr->addMeshSceneNode(wallMesh, 0, -1, vector3df(current.x, 0, current.y)) );
+			sceneNode = smgr->addMeshSceneNode(wallMesh, 0, -1, vector3df(current.x*2, 0, current.y*2));
 		}
 		else {
-			tileSceneNodes.push_back( smgr->addMeshSceneNode(groundMesh, 0, -1, vector3df(current.x, 0, current.y)) );
+			sceneNode = smgr->addMeshSceneNode(groundMesh, 0, -1, vector3df(current.x*2, 0, current.y*2));
 		}
-		sceneNode->setMaterialTexture(0, wallTextures[i - tiles.begin()]);
+		sceneNode->setMaterialTexture(0, wallTextures[tiles[index].type]);
 		sceneNode->setMaterialType(video::EMT_SOLID);
+		sceneNode->setMaterialFlag(video::EMF_LIGHTING, false);
+		tileSceneNodes.push_back(sceneNode);
 		//	calculate surrounding coordinates
 /*		surround_coords = {
 			{current[0]-1, current[1]-1}, {current[0]  , current[1]-1}, {current[0]+1, current[1]-1},
