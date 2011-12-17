@@ -47,7 +47,7 @@ gui::IGUIEnvironment* guienv;
 
 IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 	SIrrlichtCreationParameters params = SIrrlichtCreationParameters();
-	if (IrrlichtDevice::isDriverSupported(video::EDT_OPENGL)) {	
+	if (IrrlichtDevice::isDriverSupported(video::EDT_OPENGL)) {
 		params.DriverType = video::EDT_OPENGL;
 	}
 	else if (IrrlichtDevice::isDriverSupported(video::EDT_DIRECT3D9)) {
@@ -60,7 +60,7 @@ IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 		printf("No suitable video driver found.\n");
 		return NULL;
 	}
-	
+
 	params.WindowSize = core::dimension2d<u32>(UserConfig->read<int>("window_width", 800), UserConfig->read<int>("window_height", 600));
 	params.Bits = 32;
 	params.Fullscreen = false;
@@ -71,19 +71,19 @@ IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 }
 
 
-typedef struct {
+struct controls {
 	EKEY_CODE cam_up;
 	EKEY_CODE cam_down;
 	EKEY_CODE cam_left;
 	EKEY_CODE cam_right;
-} controls;
+};
 
 std::string get_userdata_path() {
 #ifdef __unix
 	string result ( getenv("HOME") );
 	result += "/.IrrRR/"; // TODO: Is this ok?
 #else // __unix
-#ifdef __WIN32__ 
+#ifdef __WIN32__
 	string result ( getenv("APPDATA") );
 	result += "\\IrrRR\\";
 #endif // __WIN32__
@@ -125,13 +125,15 @@ int main() {
 	cam->setTarget(core::vector3df(0,0,0));
 	cam->setFarValue(42000.0f);
 
-	load_textures();
 	FILE *mapfile;
-	mapfile = fopen("src/test.map", "rb");
+	mapfile = fopen("data/maps/test.map", "rb");
+	if (mapfile == NULL) {
+        printf("Could not open test map.");
+        exit(-1);
+	}
 	Map *map = new Map;
 	map->load(mapfile);
 	fclose(mapfile);
-	calculate_render(map);
 
 	controls userControls;
 
@@ -146,7 +148,7 @@ int main() {
 #define asdf 500
 #define asdfg asdf/2
 	for (int i = 0; i<8; i++) {
-		vector3df pos ( 
+		vector3df pos (
 			(float)((i & 1) != 0)*asdf-asdfg,
 			(float)((i & 2) != 0)*asdf-asdfg,
 			(float)((i & 4) != 0)*asdf-asdfg
@@ -168,7 +170,7 @@ int main() {
 	cube -> setMaterialFlag(video::EMF_LIGHTING, true);
 
 /* T-Minus ten! */
-	ITimer* timer = device->getTimer(); 
+	ITimer* timer = device->getTimer();
 	timer->setTime(0);
 	unsigned int now = 0;
 	unsigned int lastUpdate = 0;
