@@ -7,12 +7,13 @@ void Map::load(FILE* map) {
 	Tile t;
 	uint32_t type, tileheight, point;
 	uint8_t tilesize, field;
-	char* check[4] = new char[4];
+	char* check = new char[3];
+	check[2] = 0;
 	uint16_t version;
-	fread(&check, 1, 2, map);
+	fread(check, 1, 2, map);
 	fread(&version, 2, 1, map);
-	assert(strcmp(check, "RR") == 0);
-//	assert(version == 1);
+	assert(strcmp(check, "RR") == 0); // TODO: Replace with something that actually complains about an error rather than just aborting :)
+	assert(version == 1);
 	fread(&width, 4, 1, map);
 	fread(&height, 4, 1, map);
 	for (unsigned int i = 0; i < width*height; i++) { // For every tile

@@ -4,7 +4,7 @@
 env = Environment()
 conf = Configure(env)
 
-LIBS=['Irrlicht', 'boost_filesystem']
+LIBS=['Irrlicht', 'boost_filesystem', 'boost_system']
 
 SConscript("scons_exglob.py")
 
