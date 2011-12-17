@@ -5,7 +5,6 @@
 #include <boost/filesystem.hpp>
 
 #include "globs.h"
-#include "map_render.h"
 #include "map.h"
 
 

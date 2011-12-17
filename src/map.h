@@ -16,7 +16,6 @@ using irr::core::vector3df;
 #define get_index_for_tile(x, y, map) (y*map.width)+x
 #define get_coords_at_index(index, map) {map.width%index, map.width/index}
 
-
 extern std::vector<video::ITexture*> wallTextures;
 
 extern scene::IMesh *wallMesh;
