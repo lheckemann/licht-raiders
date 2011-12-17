@@ -1,11 +1,15 @@
-# Blender v2.57 (sub 1) OBJ File: ''
+# Blender v2.60 (sub 4) OBJ File: ''
 # www.blender.org
 mtllib ground.mtl
-o Cube
+o Mesh_Mesh_Cube.001
 v 1.000000 -1.000000 -1.000000
 v 1.000000 -1.000000 1.000000
 v -1.000000 -1.000000 1.000000
 v -1.000000 -1.000000 -1.000000
-usemtl Material
+vt 1.000000 0.000000
+vt 0.000000 0.000000
+vt 0.000000 1.000000
+vt 1.000000 1.000000
+usemtl Material.003_ground.png
 s off
-f 1 2 3 4
+f 1/1 4/2 3/3 2/4
