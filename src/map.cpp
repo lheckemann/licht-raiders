@@ -1,12 +1,13 @@
 #include "map.h"
 
+#include <cstring>
 #include <cassert>
 
 void Map::load(FILE* map) {
 	Tile t;
 	uint32_t type, tileheight, point;
 	uint8_t tilesize, field;
-	uint8_t check[4] = "  ";
+	char* check[4] = new char[4];
 	uint16_t version;
 	fread(&check, 1, 2, map);
 	fread(&version, 2, 1, map);
