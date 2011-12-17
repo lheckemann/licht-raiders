@@ -78,7 +78,7 @@ void Map::calculate_render() {
 		current.x = index % width;
 		current.y = index / width;
 
-		if (tile_is_wall[i - tiles.begin()]) {
+		if (tile_is_wall[tiles[index].type]) {
 			sceneNode = smgr->addMeshSceneNode(wallMesh, 0, -1, vector3df(current.x*2, 0, current.y*2));
 		}
 		else {
