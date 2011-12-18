@@ -118,6 +118,7 @@ int main() {
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
 	env = device->getGUIEnvironment();
+	scene::ISceneCollisionManager* collMan = smgr->getSceneCollisionManager();
 
 /* Set up GUI */
     gui::IGUISkin* skin = env->getSkin();
@@ -141,6 +142,11 @@ int main() {
 	cam->setTarget(core::vector3df(0,0,0));
 	cam->setFarValue(42000.0f);
 
+	vector3df camMove(0, 0, 0);
+	vector3df camPos = cam->getPosition();
+	vector3df camTarget = cam->getTarget();
+
+/* Map */
 	FILE *mapfile;
 	mapfile = fopen("data/maps/test.map", "rb");
 	if (mapfile == NULL) {
@@ -177,9 +183,14 @@ int main() {
 	unsigned int now = 0;
 	unsigned int lastUpdate = 0;
 	int frame = 0;
-	vector3df camMove(0, 0, 0);
-	vector3df camPos = cam->getPosition();
-	vector3df camTarget = cam->getTarget();
+	vector3df mousething;
+	scene::IMesh *arrowMesh = smgr->addArrowMesh("ITSAFUCKINARROW", 0xFFFFFF, 0xFF0000);
+	scene::IMeshSceneNode *mouseNode = smgr->addMeshSceneNode(arrowMesh, 0);
+	mouseNode->setRotation(vector3df(0, 0, 180));
+
+	core::line3df ray;
+	scene::ISceneNode *dummyNode;
+	core::triangle3df dummyTri;
 /* We have liftoff! */
 	while (device->run()) {
 		now = timer->getTime();
@@ -190,6 +201,7 @@ int main() {
 
 			smgr->drawAll();
 			env->drawAll();
+			driver->draw3DLine(ray.start, ray.end);
 
 			driver->endScene();
 
@@ -219,7 +231,10 @@ int main() {
 			cam->setPosition(camPos);
 			cam->setTarget(camTarget);
 
-            core::line3df ray = smgr->getSceneCollisionManager()->getRayFromScreenCoordinates(receiver.MousePosition, cam);
+            ray = collMan->getRayFromScreenCoordinates(receiver.MousePosition, cam);
+            if (collMan->getSceneNodeAndCollisionPointFromRay(ray, mousething, dummyTri)) {
+                mouseNode->setPosition(mousething);
+            }
 
 			if(receiver.IsKeyPressed(KEY_ESCAPE)) break;
 			if(frame % 100 == 0) printf("%i FPS\n", driver->getFPS());
