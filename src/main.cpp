@@ -227,6 +227,7 @@ int main() {
 			camPos = cam->getPosition();
 			camTarget = cam->getTarget();
 			camPos += camMove;
+			camMove.Y = 0;
 			camTarget += camMove;
 			cam->setPosition(camPos);
 			cam->setTarget(camTarget);
