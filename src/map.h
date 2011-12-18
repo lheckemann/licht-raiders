@@ -47,11 +47,13 @@ const std::string texture_names[] = {
 	"solid",
 	"eseam",
 	"oseam",
+	"rseam",
 	"water",
 	"lava"
 };
 const bool tile_is_wall[] = {
 	false,
+	true,
 	true,
 	true,
 	true,
