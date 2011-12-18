@@ -138,7 +138,7 @@ int main() {
 /* Set up camera */
 
 	scene::ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0, 10, -2), vector3df(0, 0, 0));
-	scene::ICameraSceneNode *blehcam = smgr->addCameraSceneNode(0, vector3df(0, 50, -2), vector3df(0, 0, 0));
+//	scene::ICameraSceneNode *blehcam = smgr->addCameraSceneNode(0, vector3df(0, 50, -2), vector3df(0, 0, 0));
 	cam->setPosition(core::vector3df(-5,18,0));
 	cam->setTarget(core::vector3df(0,0,0));
 	cam->setFarValue(42000.0f);
@@ -185,11 +185,11 @@ int main() {
 	unsigned int lastUpdate = 0;
 	int frame = 0;
 	vector3df mousething;
-	scene::IMesh *arrowMesh = smgr->addArrowMesh("ITSAFUCKINARROW", 0xFFFFFF, 0xFF0000);
+	scene::IMesh *arrowMesh = smgr->addArrowMesh("ITSANARROW", 0xFFFFFF, 0xFF0000);
 	scene::IMeshSceneNode *mouseNode = smgr->addMeshSceneNode(arrowMesh, 0);
-    scene::IMeshSceneNode *camPoint = smgr->addMeshSceneNode(arrowMesh, cam);
+//	scene::IMeshSceneNode *camPoint = smgr->addMeshSceneNode(arrowMesh, cam);
 	mouseNode->setRotation(vector3df(0, 0, 180));
-	camPoint->setRotation(vector3df(0,0,180));
+//	camPoint->setRotation(vector3df(0,0,180));
 
 	core::line3df ray;
 	scene::ISceneNode *dummyNode;
@@ -204,9 +204,9 @@ int main() {
 
 			smgr->drawAll();
 			env->drawAll();
-			driver->draw3DLine(ray.start, vector3df(0,0,0));
+			driver->draw3DLine(cam->getAbsolutePosition(), vector3df(0,0,0));
+			driver->draw3DLine(cam->getAbsolutePosition(), ray.start, 0x0000ff);
 			driver->draw3DLine(ray.end, vector3df(0,0,0), 0x00ff00);
-
 
 			driver->endScene();
 
@@ -238,7 +238,7 @@ int main() {
 			cam->setTarget(camTarget);
 
             ray = collMan->getRayFromScreenCoordinates(receiver.MousePosition, cam);
-            ray.start = cam->getPosition();
+            ray.start = cam->getAbsolutePosition();
             if (collMan->getSceneNodeAndCollisionPointFromRay(ray, mousething, dummyTri)) {
                 mouseNode->setPosition(mousething);
             }

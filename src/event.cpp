@@ -12,7 +12,6 @@ gui::IGUICheckBox *GUI_minecraftmode;
 
 bool minecraftMode;
 
-
 void handleGUI(const SEvent& event) {
     s32 cid = event.GUIEvent.Caller->getID();
     switch(event.GUIEvent.EventType) {
@@ -29,10 +28,13 @@ void handleGUI(const SEvent& event) {
 bool EventReceiver::OnEvent(const SEvent& event)
 {
 	switch(event.EventType) {
-	    case EET_KEY_INPUT_EVENT: KeyDown[event.KeyInput.Key] = event.KeyInput.PressedDown; return false;
-	    case EET_GUI_EVENT: handleGUI(event); break;
-	    case EET_MOUSE_INPUT_EVENT: if(event.MouseInput.Event == EMIE_MOUSE_MOVED) {MousePosition.X = event.MouseInput.X; MousePosition.Y = event.MouseInput.Y;} else if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {printf("Click @ %i, %i\n", MousePosition.X, MousePosition.Y);}; break;
-	    default: break;
+        case EET_KEY_INPUT_EVENT: KeyDown[event.KeyInput.Key] = event.KeyInput.PressedDown; return false;
+        case EET_GUI_EVENT: handleGUI(event); break;
+        case EET_MOUSE_INPUT_EVENT:
+			if(event.MouseInput.Event == EMIE_MOUSE_MOVED) {MousePosition.X = event.MouseInput.X; MousePosition.Y = event.MouseInput.Y;}
+            else if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) printf("Click @ %i, %i\n", MousePosition.X, MousePosition.Y);
+            break;
+        default: break;
 	}
 	return false;
 }
