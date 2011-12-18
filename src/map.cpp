@@ -56,8 +56,8 @@ void Map::load_textures() {
 			bork((path + " could not be loaded").c_str());
 		}
 	}
-	wallMesh = smgr->getMesh("data/models/wall.obj");
-	groundMesh = smgr->getMesh("data/models/ground.obj");
+	wallMesh = smgr->getMesh("data/models/wall.dae");
+	groundMesh = smgr->getMesh("data/models/ground.dae");
 }
 
 
