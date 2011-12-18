@@ -204,8 +204,8 @@ int main() {
 
 			smgr->drawAll();
 			env->drawAll();
-			driver->draw3DLine(cam->getAbsolutePosition(), vector3df(0,0,0));
-			driver->draw3DLine(cam->getAbsolutePosition(), ray.start, 0x0000ff);
+			driver->draw3DLine(cam->getAbsolutePosition(), vector3df(0,0,0), 0x0000ff);
+			driver->draw3DLine(cam->getAbsolutePosition(), ray.start, 0xff0000);
 			driver->draw3DLine(ray.end, vector3df(0,0,0), 0x00ff00);
 
 			driver->endScene();
