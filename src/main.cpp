@@ -193,9 +193,9 @@ int main() {
 			frame++;
 			lastUpdate = now;
 			driver->beginScene(true, true, SColor(255, 255, 0, 255));
-			driver->draw3DLine(ray.end, vector3df(0,0,0), 0x00ff00);
-			driver->draw3DLine(cam->getAbsolutePosition(), vector3df(0,0,0), 0x0000ff);
-			driver->draw3DLine(cam->getAbsolutePosition(), ray.start, 0xff0000);
+
+			driver->draw3DLine(cam->getAbsolutePosition(), ray.end, 0xff0000);
+
 			smgr->drawAll();
 			env->drawAll();
 			driver->endScene();
@@ -233,9 +233,9 @@ int main() {
 			if (collMan->getSceneNodeAndCollisionPointFromRay(ray, mousething, dummyTri)) {
 				mouseNode->setPosition(mousething);
 			}
-
 			if(receiver.IsKeyPressed(KEY_ESCAPE)) break;
-			if(frame % 100 == 0) printf("%i FPS\n", driver->getFPS());
+			if(frame % 400 == 0) printf("%i FPS\n", driver->getFPS());
+			if(frame % 100 == 1) printf("%f, %f, %f\n", ray.end.X, ray.end.Y, ray.end.Z);
 		}
 		else {
 			Pass(10);
