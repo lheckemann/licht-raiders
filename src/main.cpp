@@ -34,11 +34,11 @@ scene::ISceneManager* smgr;
 // I couldn't resist, alright? :D
 void bork(std::string msg) {
 #ifndef BE_POLITE
-    printf("SHIT! %s!\n", msg.c_str());
+	printf("SHIT! %s!\n", msg.c_str());
 #else
-    printf("%s, aborting.\n", msg.c_str());
+	printf("%s, aborting.\n", msg.c_str());
 #endif
-    exit(-1);
+	exit(-1);
 }
 
 
@@ -121,8 +121,8 @@ int main() {
 	scene::ISceneCollisionManager* collMan = smgr->getSceneCollisionManager();
 
 /* Set up GUI */
-    gui::IGUISkin* skin = env->getSkin();
-    setup_GUI();
+	gui::IGUISkin* skin = env->getSkin();
+	setup_GUI();
 
 /* Load controls */
 
@@ -151,7 +151,7 @@ int main() {
 	FILE *mapfile;
 	mapfile = fopen("data/maps/test.map", "rb");
 	if (mapfile == NULL) {
-        bork("Could not open test map");
+		bork("Could not open test map");
 	}
 	Map *map = new Map;
 	map->load(mapfile);
@@ -237,11 +237,11 @@ int main() {
 			cam->setPosition(camPos);
 			cam->setTarget(camTarget);
 
-            ray = collMan->getRayFromScreenCoordinates(receiver.MousePosition, cam);
-            ray.start = cam->getAbsolutePosition();
-            if (collMan->getSceneNodeAndCollisionPointFromRay(ray, mousething, dummyTri)) {
-                mouseNode->setPosition(mousething);
-            }
+			ray = collMan->getRayFromScreenCoordinates(receiver.MousePosition, cam);
+			ray.start = cam->getAbsolutePosition();
+			if (collMan->getSceneNodeAndCollisionPointFromRay(ray, mousething, dummyTri)) {
+				mouseNode->setPosition(mousething);
+			}
 
 			if(receiver.IsKeyPressed(KEY_ESCAPE)) break;
 			if(frame % 100 == 0) printf("%i FPS\n", driver->getFPS());

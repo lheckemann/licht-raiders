@@ -43,8 +43,8 @@ void Map::load_tiles(FILE* map) {
 }
 
 void Map::load(FILE* map) {
-    load_tiles(map);
-    calculate_render();
+	load_tiles(map);
+	calculate_render();
 }
 
 void Map::load_textures() {
@@ -53,7 +53,7 @@ void Map::load_textures() {
 		path = ("data/textures/tile/" + texture_names[i] + ".png").c_str();
 		wallTextures.push_back(driver->getTexture(path));
 		if (*(wallTextures.end()-1) == NULL) {
-		    bork((path + " could not be loaded").c_str());
+			bork((path + " could not be loaded").c_str());
 		}
 	}
 	wallMesh = smgr->getMesh("data/models/wall.obj");
@@ -63,7 +63,7 @@ void Map::load_textures() {
 
 #define index (i - tiles.begin())
 void Map::calculate_render() {
-    load_textures();
+	load_textures();
 	std::vector<Tile>::iterator i;
 	mapCoords current;
 	current.x = 0;

@@ -8,7 +8,7 @@ using namespace irr;
 class EventReceiver : public IEventReceiver
 {
 public:
-    core::position2di MousePosition;
+	core::position2di MousePosition;
 	virtual bool OnEvent(const SEvent& event);
 	virtual bool IsKeyPressed(EKEY_CODE keyCode) const;
 	EventReceiver();
