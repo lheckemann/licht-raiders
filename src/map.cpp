@@ -79,15 +79,15 @@ void Map::calculate_render() {
 		current.y = index / width;
 
 		if (tile_is_wall[tiles[index].type]) {
-			sceneNode = smgr->addMeshSceneNode(wallMesh, 0, -1, vector3df(current.x*2, 0, current.y*2));
+			sceneNode = smgr->addMeshSceneNode(wallMesh, 0, -1, vector3df(current.y*-2, 0, current.x*-2));
 		}
 		else {
-			sceneNode = smgr->addMeshSceneNode(groundMesh, 0, -1, vector3df(current.x*2, 0, current.y*2));
+			sceneNode = smgr->addMeshSceneNode(groundMesh, 0, -1, vector3df(current.y*-2, 0, current.x*-2));
 		}
 		sceneNode->setMaterialTexture(0, wallTextures[tiles[index].type]);
 		sceneNode->setMaterialType(video::EMT_SOLID);
-		sceneNode->setMaterialFlag(video::EMF_LIGHTING, false);
-		sceneNode->setMaterialFlag(video::EMF_BILINEAR_FILTER, false); // Minecraft mode!
+//		sceneNode->setMaterialFlag(video::EMF_LIGHTING, false);
+		sceneNode->setMaterialFlag(video::EMF_BILINEAR_FILTER, not UserConfig.read<bool>("display.minecraftmode", false)); // Minecraft!
 		tileSceneNodes.push_back(sceneNode);
 		//	calculate surrounding coordinates
 /*		surround_coords = {
