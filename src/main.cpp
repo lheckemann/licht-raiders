@@ -158,9 +158,9 @@ int main() {
 	fclose(mapfile);
 
 /* Set up lighting */
-	std::vector<scene::ILightSceneNode*> lights;
+/*	std::vector<scene::ILightSceneNode*> lights;
 
-#define asdf 500
+#define asdf 3
 #define asdfg asdf/2
 	for (int i = 0; i<8; i++) {
 		vector3df pos (
@@ -168,8 +168,10 @@ int main() {
 			(float)((i & 2) != 0)*asdf-asdfg,
 			(float)((i & 4) != 0)*asdf-asdfg
 		);
-		lights.push_back(smgr->addLightSceneNode(NULL, pos));
-	}
+		lights.push_back(smgr->addLightSceneNode(cam, pos));
+	}*/
+	smgr->setAmbientLight(SColor(0x000000));
+	scene::ILightSceneNode *light = smgr->addLightSceneNode(cam);
 
 
 /* Set up skybox */
