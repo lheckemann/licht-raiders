@@ -158,27 +158,17 @@ int main() {
 	fclose(mapfile);
 
 /* Set up lighting */
-/*	std::vector<scene::ILightSceneNode*> lights;
 
-#define asdf 3
-#define asdfg asdf/2
-	for (int i = 0; i<8; i++) {
-		vector3df pos (
-			(float)((i & 1) != 0)*asdf-asdfg,
-			(float)((i & 2) != 0)*asdf-asdfg,
-			(float)((i & 4) != 0)*asdf-asdfg
-		);
-		lights.push_back(smgr->addLightSceneNode(cam, pos));
-	}*/
 	smgr->setAmbientLight(SColor(0x000000));
-	scene::ILightSceneNode *light = smgr->addLightSceneNode(cam);
+	scene::ILightSceneNode *groundLight = smgr->addLightSceneNode(0, vector3df(0,0,0), SColor(0xffffff), 10.0f);
+	scene::ILightSceneNode *raisedLight = smgr->addLightSceneNode(groundLight, vector3df(0,5,0), SColor(0xffffff), 10.0f);
 
 
 /* Set up skybox */
 
 	const io::path skyboxFilename ("data/textures/skybox/top.png");
 	video::ITexture *sb_tex = driver->getTexture(skyboxFilename);
-	smgr->addSkyBoxSceneNode(sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, sb_tex);
+	//smgr->addSkyBoxSceneNode(sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, sb_tex); XXX REACTIVATE
 
 /* T-Minus ten! */
 	ITimer* timer = device->getTimer();
@@ -202,14 +192,12 @@ int main() {
 		if (now >= lastUpdate + 1000.0/FPS) {
 			frame++;
 			lastUpdate = now;
-			driver->beginScene(true, true, SColor(255, 0, 0, 0));
-
-			smgr->drawAll();
-			env->drawAll();
+			driver->beginScene(true, true, SColor(255, 255, 0, 255));
+			driver->draw3DLine(ray.end, vector3df(0,0,0), 0x00ff00);
 			driver->draw3DLine(cam->getAbsolutePosition(), vector3df(0,0,0), 0x0000ff);
 			driver->draw3DLine(cam->getAbsolutePosition(), ray.start, 0xff0000);
-			driver->draw3DLine(ray.end, vector3df(0,0,0), 0x00ff00);
-
+			smgr->drawAll();
+			env->drawAll();
 			driver->endScene();
 
 			camMove.set(0, 0, 0);
@@ -238,6 +226,7 @@ int main() {
 			camTarget += camMove;
 			cam->setPosition(camPos);
 			cam->setTarget(camTarget);
+			groundLight->setPosition(camTarget);
 
 			ray = collMan->getRayFromScreenCoordinates(receiver.MousePosition, cam);
 			ray.start = cam->getAbsolutePosition();
