@@ -18,18 +18,18 @@
 #define Pass(ms) usleep(ms*1000)
 #endif
 
-#define FPS 63.0
+#define FPS 68.0
 
 using namespace irr;
 using core::vector3df;
 using video::SColor;
+using core::rect;
 
 EventReceiver receiver;
 ConfigFile UserConfig;
 
 video::IVideoDriver* driver;
 scene::ISceneManager* smgr;
-gui::IGUIEnvironment* guienv;
 
 // I couldn't resist, alright? :D
 void bork(std::string msg) {
@@ -117,11 +117,27 @@ int main() {
 
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
-	guienv = device->getGUIEnvironment();
+	env = device->getGUIEnvironment();
+
+/* Set up GUI */
+    gui::IGUISkin* skin = env->getSkin();
+    setup_GUI();
+
+/* Load controls */
+
+	controls userControls;
+
+	userControls.cam_up = (EKEY_CODE) UserConfig.read<int>("keys.camera_up", KEY_KEY_W);
+	userControls.cam_down = (EKEY_CODE) UserConfig.read<int>("keys.camera_down", KEY_KEY_S);
+	userControls.cam_left = (EKEY_CODE) UserConfig.read<int>("keys.camera_left", KEY_KEY_A);
+	userControls.cam_right = (EKEY_CODE) UserConfig.read<int>("keys.camera_right", KEY_KEY_D);
+	userControls.cam_raise = (EKEY_CODE) UserConfig.read<int>("keys.camera_raise", KEY_KEY_Q);
+	userControls.cam_lower = (EKEY_CODE) UserConfig.read<int>("keys.camera_lower", KEY_KEY_E);
+
+/* Set up camera */
 
 	scene::ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0, 10, -2), vector3df(0, 0, 0));
-	cam->setFarValue(42000.0f);
-	cam->setPosition(core::vector3df(-3,8,0));
+	cam->setPosition(core::vector3df(-5,18,0));
 	cam->setTarget(core::vector3df(0,0,0));
 	cam->setFarValue(42000.0f);
 
@@ -133,16 +149,6 @@ int main() {
 	Map *map = new Map;
 	map->load(mapfile);
 	fclose(mapfile);
-
-	controls userControls;
-
-	userControls.cam_up = (EKEY_CODE) UserConfig.read<int>("keys.camera_up", KEY_KEY_W);
-	userControls.cam_down = (EKEY_CODE) UserConfig.read<int>("keys.camera_down", KEY_KEY_S);
-	userControls.cam_left = (EKEY_CODE) UserConfig.read<int>("keys.camera_left", KEY_KEY_A);
-	userControls.cam_right = (EKEY_CODE) UserConfig.read<int>("keys.camera_right", KEY_KEY_D);
-	userControls.cam_raise = (EKEY_CODE) UserConfig.read<int>("keys.camera_raise", KEY_KEY_Q);
-	userControls.cam_lower = (EKEY_CODE) UserConfig.read<int>("keys.camera_lower", KEY_KEY_E);
-
 
 /* Set up lighting */
 	std::vector<scene::ILightSceneNode*> lights;
@@ -183,7 +189,7 @@ int main() {
 			driver->beginScene(true, true, SColor(255, 0, 0, 0));
 
 			smgr->drawAll();
-			guienv->drawAll();
+			env->drawAll();
 
 			driver->endScene();
 
@@ -213,7 +219,10 @@ int main() {
 			cam->setPosition(camPos);
 			cam->setTarget(camTarget);
 
+            core::line3df ray = smgr->getSceneCollisionManager()->getRayFromScreenCoordinates(receiver.MousePosition, cam);
+
 			if(receiver.IsKeyPressed(KEY_ESCAPE)) break;
+			if(frame % 100 == 0) printf("%i FPS\n", driver->getFPS());
 		}
 		else {
 			Pass(10);

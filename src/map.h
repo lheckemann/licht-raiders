@@ -64,6 +64,20 @@ const bool tile_is_wall[] = {
 	false
 };
 
+// I made this for an experiment with addWaterSurfaceSceneNode; It kind of failed :D
+const bool tile_is_liquid[] = {
+	false,
+	false,
+	false,
+	false,
+	false,
+	false,
+	false,
+	false,
+	true,
+	true
+};
+
 struct mapCoords {int x,y;};
 
 void load_textures();

@@ -86,7 +86,7 @@ void Map::calculate_render() {
 		}
 		sceneNode->setMaterialTexture(0, wallTextures[tiles[index].type]);
 		sceneNode->setMaterialType(video::EMT_SOLID);
-//		sceneNode->setMaterialFlag(video::EMF_LIGHTING, false);
+		sceneNode->setMaterialFlag(video::EMF_LIGHTING, UserConfig.read<bool>("display.lighting", true));
 		sceneNode->setMaterialFlag(video::EMF_BILINEAR_FILTER, not UserConfig.read<bool>("display.minecraftmode", false)); // Minecraft!
 		tileSceneNodes.push_back(sceneNode);
 		//	calculate surrounding coordinates
