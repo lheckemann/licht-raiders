@@ -161,7 +161,9 @@ int main() {
 
 	smgr->setAmbientLight(SColor(0x000000));
 	scene::ILightSceneNode *groundLight = smgr->addLightSceneNode(0, vector3df(0,0,0), SColor(0xffffff), 10.0f);
+	scene::ILightSceneNode *groundLight2 = smgr->addLightSceneNode(0, vector3df(0,0,0), SColor(0xffffff), 10.0f);
 	scene::ILightSceneNode *raisedLight = smgr->addLightSceneNode(groundLight, vector3df(0,5,0), SColor(0xffffff), 10.0f);
+	scene::ILightSceneNode *raisedLight2 = smgr->addLightSceneNode(groundLight2, vector3df(0,5,0), SColor(0xffffff), 10.0f);
 
 
 /* Set up skybox */
@@ -226,7 +228,9 @@ int main() {
 			camTarget += camMove;
 			cam->setPosition(camPos);
 			cam->setTarget(camTarget);
-			groundLight->setPosition(camTarget);
+			camPos.Y = 0.01;
+			groundLight->setPosition(camPos);
+			groundLight2->setPosition(camTarget);
 
 			ray = collMan->getRayFromScreenCoordinates(receiver.MousePosition, cam);
 			ray.start = cam->getAbsolutePosition();
