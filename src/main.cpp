@@ -76,6 +76,8 @@ struct controls {
 	EKEY_CODE cam_right;
 	EKEY_CODE cam_raise;
 	EKEY_CODE cam_lower;
+	EKEY_CODE cam_rot_cw;
+	EKEY_CODE cam_rot_acw;
 };
 
 std::string get_userdata_path() {
@@ -134,10 +136,14 @@ int main() {
 	userControls.cam_right = (EKEY_CODE) UserConfig.read<int>("keys.camera_right", KEY_KEY_D);
 	userControls.cam_raise = (EKEY_CODE) UserConfig.read<int>("keys.camera_raise", KEY_KEY_Q);
 	userControls.cam_lower = (EKEY_CODE) UserConfig.read<int>("keys.camera_lower", KEY_KEY_E);
+	userControls.cam_rot_cw = (EKEY_CODE) UserConfig.read<int>("keys.camera_rot_cw", KEY_KEY_Z);
+	userControls.cam_rot_acw = (EKEY_CODE) UserConfig.read<int>("keys.camera_rot_acw", KEY_KEY_X);
 
 /* Set up camera */
 
-	scene::ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0, 10, -2), vector3df(0, 0, 0));
+	scene::ISceneNode *cam_base = smgr->addEmptySceneNode(0);
+	scene::ISceneNode *cam_trans1 = smgr->addEmptySceneNode(cam_base);
+	scene::ICameraSceneNode *cam = smgr->addCameraSceneNode(cam_trans1, vector3df(0, 10, -2), vector3df(0, 0, 0));
 //	scene::ICameraSceneNode *blehcam = smgr->addCameraSceneNode(0, vector3df(0, 50, -2), vector3df(0, 0, 0));
 	cam->setPosition(core::vector3df(-5,18,0));
 	cam->setTarget(core::vector3df(0,0,0));
@@ -146,6 +152,9 @@ int main() {
 	vector3df camMove(0, 0, 0);
 	vector3df camPos = cam->getPosition();
 	vector3df camTarget = cam->getTarget();
+	int camRot = 0;
+	float camHeight = 5;
+	vector3df tempVec; // Used for miscellaneous things, just as a temporary vec3df storage
 
 /* Map */
 	FILE *mapfile;
@@ -186,7 +195,6 @@ int main() {
 //	camPoint->setRotation(vector3df(0,0,180));
 
 	core::line3df ray;
-	scene::ISceneNode *dummyNode;
 	core::triangle3df dummyTri;
 /* We have liftoff! */
 	while (device->run()) {
@@ -196,7 +204,7 @@ int main() {
 			lastUpdate = now;
 			driver->beginScene(true, true, SColor(255, 255, 0, 255));
 
-			driver->draw3DLine(cam->getAbsolutePosition(), ray.end, 0xff0000);
+			driver->draw3DLine(cam->getAbsolutePosition(), ray.end, 0xffffff);
 
 			smgr->drawAll();
 			env->drawAll();
@@ -216,21 +224,33 @@ int main() {
 				camMove.Z = -0.1;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_raise)) {
-				camMove.Y = 0.1;
+				camHeight += 0.1;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_lower)) {
-				camMove.Y = -0.1;
+				camHeight -= 0.1;
 			}
-			camPos = cam->getPosition();
+			if (receiver.IsKeyPressed(KEY_KEY_H)) {
+				printf("%f, %f, %f\n", cam->getUpVector().X, cam->getUpVector().Y, cam->getUpVector().Z);
+			}
+			camMove.rotateXZBy(camRot);
+			camPos = cam_base->getPosition();
 			camTarget = cam->getTarget();
 			camPos += camMove;
-			camMove.Y = 0;
 			camTarget += camMove;
-			cam->setPosition(camPos);
+			cam_base->setPosition(camPos);
 			cam->setTarget(camTarget);
-			camPos.Y = 0.01;
 			groundLight->setPosition(camPos);
 			groundLight2->setPosition(camTarget);
+
+			if (receiver.IsKeyPressed(userControls.cam_rot_cw)) {
+				camRot -= 1;
+			}
+			if (receiver.IsKeyPressed(userControls.cam_rot_acw)) {
+				camRot += 1;
+			}
+			tempVec = vector3df(-5,camHeight,0);
+			tempVec.rotateXZBy(camRot);
+			cam->setPosition(tempVec);
 
 			ray = collMan->getRayFromScreenCoordinates(receiver.MousePosition, cam);
 			ray.start = cam->getAbsolutePosition();
