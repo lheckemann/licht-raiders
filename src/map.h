@@ -17,6 +17,7 @@ using irr::core::vector3df;
 #define get_coords_at_index(index, map) {map.width%index, map.width/index}
 
 extern std::vector<video::ITexture*> wallTextures;
+extern video::ITexture* selectedTex;
 
 extern scene::IMesh *wallMesh;
 extern scene::IMesh *groundMesh;

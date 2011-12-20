@@ -1,6 +1,7 @@
 #include "map.h"
 
 std::vector<video::ITexture*> wallTextures;
+video::ITexture *selectedTex;
 
 scene::IMesh *wallMesh;
 scene::IMesh *groundMesh;
@@ -56,6 +57,14 @@ void Map::load_textures() {
 			bork((path + " could not be loaded").c_str());
 		}
 	}
+	selectedTex = driver->addTexture(core::dimension2d<u32>(1,1), "WALL_SELMASK", video::ECF_A8R8G8B8);
+	char* texData = (char*) selectedTex->lock();
+	texData[0] = '\x80';
+	texData[1] = '\x00';
+	texData[2] = '\x00';
+	texData[3] = '\xff';
+	selectedTex->unlock();
+
 	wallMesh = smgr->getMesh("data/models/wall.dae");
 	groundMesh = smgr->getMesh("data/models/ground.dae");
 }

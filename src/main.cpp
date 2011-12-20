@@ -241,9 +241,9 @@ int main() {
 			tempVec.rotateXZBy(camRot);
 			cam->setPosition(tempVec);
 
-			if(dummySceneNode) dummySceneNode->setVisible(true);
+			if(dummySceneNode) dummySceneNode->setMaterialTexture(1, 0);
 			dummySceneNode = collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, MAP_SCN_ID);
-			if(dummySceneNode) dummySceneNode->setVisible(false);
+			if(dummySceneNode) dummySceneNode->setMaterialTexture(1, selectedTex);
 			if(receiver.IsKeyPressed(KEY_ESCAPE)) break;
 			if(frame % 400 == 0) printf("%i FPS\n", driver->getFPS());
 		}
