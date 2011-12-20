@@ -18,8 +18,6 @@
 #define Pass(ms) usleep(ms*1000)
 #endif
 
-#define FPS 68.0
-
 using namespace irr;
 using core::vector3df;
 using video::SColor;
@@ -152,7 +150,7 @@ int main() {
 	vector3df camMove(0, 0, 0);
 	vector3df camPos = cam->getPosition();
 	vector3df camTarget = cam->getTarget();
-	int camRot = 0;
+	float camRot = 0;
 	float camHeight = 5;
 	vector3df tempVec; // Used for miscellaneous things, just as a temporary vec3df storage
 
@@ -199,15 +197,13 @@ int main() {
 /* We have liftoff! */
 	while (device->run()) {
 		now = timer->getTime();
-		if (now >= lastUpdate + 1000.0/FPS) {
+		if (now >= lastUpdate + 1000.0/MAX_FPS) {
 			frame++;
 			lastUpdate = now;
 			driver->beginScene(true, true, SColor(255, 255, 0, 255));
-
-			driver->draw3DLine(cam->getAbsolutePosition(), ray.end, 0xffffff);
-
 			smgr->drawAll();
 			env->drawAll();
+			driver->draw3DLine(cam->getAbsolutePosition(), ray.end, 0xffffff);
 			driver->endScene();
 
 			camMove.set(0, 0, 0);
@@ -228,9 +224,6 @@ int main() {
 			}
 			if (receiver.IsKeyPressed(userControls.cam_lower)) {
 				camHeight -= 0.1;
-			}
-			if (receiver.IsKeyPressed(KEY_KEY_H)) {
-				printf("%f, %f, %f\n", cam->getUpVector().X, cam->getUpVector().Y, cam->getUpVector().Z);
 			}
 			camMove.rotateXZBy(camRot);
 			camPos = cam_base->getPosition();
@@ -254,12 +247,11 @@ int main() {
 
 			ray = collMan->getRayFromScreenCoordinates(receiver.MousePosition, cam);
 			ray.start = cam->getAbsolutePosition();
-			if (collMan->getSceneNodeAndCollisionPointFromRay(ray, mousething, dummyTri)) {
+/*			if (collMan->getSceneNodeAndCollisionPointFromRay(ray, mousething, dummyTri)) {
 				mouseNode->setPosition(mousething);
-			}
+			}*/
 			if(receiver.IsKeyPressed(KEY_ESCAPE)) break;
 			if(frame % 400 == 0) printf("%i FPS\n", driver->getFPS());
-			if(frame % 100 == 1) printf("%f, %f, %f\n", ray.end.X, ray.end.Y, ray.end.Z);
 		}
 		else {
 			Pass(10);
