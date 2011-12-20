@@ -61,7 +61,7 @@ void Map::load_textures() {
 }
 
 
-#define index (i - tiles.begin())
+#define index ((int)(i - tiles.begin()))
 void Map::calculate_render() {
 	load_textures();
 	std::vector<Tile>::iterator i;
@@ -79,10 +79,10 @@ void Map::calculate_render() {
 		current.y = index / width;
 
 		if (tile_is_wall[tiles[index].type]) {
-			sceneNode = smgr->addMeshSceneNode(wallMesh, 0, -1, vector3df(current.y*-2, 0, current.x*-2));
+			sceneNode = smgr->addMeshSceneNode(wallMesh, 0, MAP_SCN_ID, vector3df(current.y*-2, 0, current.x*-2));
 		}
 		else {
-			sceneNode = smgr->addMeshSceneNode(groundMesh, 0, -1, vector3df(current.y*-2, 0, current.x*-2));
+			sceneNode = smgr->addMeshSceneNode(groundMesh, 0, MAP_SCN_ID, vector3df(current.y*-2, 0, current.x*-2));
 		}
 		sceneNode->setMaterialTexture(0, wallTextures[tiles[index].type]);
 		sceneNode->setMaterialType(video::EMT_SOLID);

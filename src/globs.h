@@ -5,6 +5,9 @@
 #include "ConfigFile.h"
 
 #define MAX_FPS 75.0 // Needs to ne a fair bit bigger than what we actually want. Don't ask me why.
+#define MAP_SCN_ID 1
+#define DEFAULT_ID 0
+
 
 extern EventReceiver receiver;
 extern ConfigFile UserConfig;

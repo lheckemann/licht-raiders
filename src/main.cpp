@@ -139,10 +139,8 @@ int main() {
 
 /* Set up camera */
 
-	scene::ISceneNode *cam_base = smgr->addEmptySceneNode(0);
-	scene::ISceneNode *cam_trans1 = smgr->addEmptySceneNode(cam_base);
-	scene::ICameraSceneNode *cam = smgr->addCameraSceneNode(cam_trans1, vector3df(0, 10, -2), vector3df(0, 0, 0));
-//	scene::ICameraSceneNode *blehcam = smgr->addCameraSceneNode(0, vector3df(0, 50, -2), vector3df(0, 0, 0));
+	scene::ISceneNode *cam_base = smgr->addEmptySceneNode(0, DEFAULT_ID);
+	scene::ICameraSceneNode *cam = smgr->addCameraSceneNode(cam_base, vector3df(0, 10, -2), vector3df(0, 0, 0), DEFAULT_ID);
 	cam->setPosition(core::vector3df(-5,18,0));
 	cam->setTarget(core::vector3df(0,0,0));
 	cam->setFarValue(42000.0f);
@@ -167,17 +165,17 @@ int main() {
 /* Set up lighting */
 
 	smgr->setAmbientLight(SColor(0x000000));
-	scene::ILightSceneNode *groundLight = smgr->addLightSceneNode(0, vector3df(0,0,0), SColor(0xffffff), 10.0f);
-	scene::ILightSceneNode *groundLight2 = smgr->addLightSceneNode(0, vector3df(0,0,0), SColor(0xffffff), 10.0f);
-	scene::ILightSceneNode *raisedLight = smgr->addLightSceneNode(groundLight, vector3df(0,5,0), SColor(0xffffff), 10.0f);
-	scene::ILightSceneNode *raisedLight2 = smgr->addLightSceneNode(groundLight2, vector3df(0,5,0), SColor(0xffffff), 10.0f);
+	scene::ILightSceneNode *groundLight = smgr->addLightSceneNode(0, vector3df(0,0,0), SColor(0xffffff), 10.0f, DEFAULT_ID);
+	scene::ILightSceneNode *groundLight2 = smgr->addLightSceneNode(0, vector3df(0,0,0), SColor(0xffffff), 10.0f, DEFAULT_ID);
+	scene::ILightSceneNode *raisedLight = smgr->addLightSceneNode(groundLight, vector3df(0,5,0), SColor(0xffffff), 10.0f, DEFAULT_ID);
+	scene::ILightSceneNode *raisedLight2 = smgr->addLightSceneNode(groundLight2, vector3df(0,5,0), SColor(0xffffff), 10.0f, DEFAULT_ID);
 
 
 /* Set up skybox */
 
 	const io::path skyboxFilename ("data/textures/skybox/top.png");
 	video::ITexture *sb_tex = driver->getTexture(skyboxFilename);
-	//smgr->addSkyBoxSceneNode(sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, sb_tex); XXX REACTIVATE
+	//smgr->addSkyBoxSceneNode(sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, 0, DEFAULT_ID); XXX REACTIVATE
 
 /* T-Minus ten! */
 	ITimer* timer = device->getTimer();
@@ -187,10 +185,9 @@ int main() {
 	int frame = 0;
 	vector3df mousething;
 	scene::IMesh *arrowMesh = smgr->addArrowMesh("ITSANARROW", 0xFFFFFF, 0xFF0000);
-	scene::IMeshSceneNode *mouseNode = smgr->addMeshSceneNode(arrowMesh, 0);
-//	scene::IMeshSceneNode *camPoint = smgr->addMeshSceneNode(arrowMesh, cam);
+	scene::IMeshSceneNode *mouseNode = smgr->addMeshSceneNode(arrowMesh, 0, DEFAULT_ID);
+	scene::ISceneNode *dummySceneNode = NULL;
 	mouseNode->setRotation(vector3df(0, 0, 180));
-//	camPoint->setRotation(vector3df(0,0,180));
 
 	core::line3df ray;
 	core::triangle3df dummyTri;
@@ -203,7 +200,6 @@ int main() {
 			driver->beginScene(true, true, SColor(255, 255, 0, 255));
 			smgr->drawAll();
 			env->drawAll();
-			driver->draw3DLine(cam->getAbsolutePosition(), ray.end, 0xffffff);
 			driver->endScene();
 
 			camMove.set(0, 0, 0);
@@ -245,11 +241,9 @@ int main() {
 			tempVec.rotateXZBy(camRot);
 			cam->setPosition(tempVec);
 
-			ray = collMan->getRayFromScreenCoordinates(receiver.MousePosition, cam);
-			ray.start = cam->getAbsolutePosition();
-/*			if (collMan->getSceneNodeAndCollisionPointFromRay(ray, mousething, dummyTri)) {
-				mouseNode->setPosition(mousething);
-			}*/
+			if(dummySceneNode) dummySceneNode->setVisible(true);
+			dummySceneNode = collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, MAP_SCN_ID);
+			if(dummySceneNode) dummySceneNode->setVisible(false);
 			if(receiver.IsKeyPressed(KEY_ESCAPE)) break;
 			if(frame % 400 == 0) printf("%i FPS\n", driver->getFPS());
 		}
