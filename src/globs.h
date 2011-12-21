@@ -4,7 +4,7 @@
 #include "event.h"
 #include "ConfigFile.h"
 #include "map.h"
-#include "object.h"
+#include "entity.h"
 
 #define MAX_FPS 65.0 // Needs to be a fair bit bigger than what we actually want. Don't ask me why.
 #define ID_SELECTABLE 0x100
@@ -25,6 +25,15 @@ extern bool minecraftMode;
 
 extern gui::IGUIWindow* options;
 
-extern scene::IMeshSceneNode* selected_mesh;
+extern scene::ISceneNode* selected_node;
 
 extern Map *map;
+
+struct NodeOwner {
+	enum NODE_OWNER_TYPE {
+		NOT_TILE,
+		NOT_ENTITY
+	} ownerType;
+	Tile* tileOwner;
+	Entity* entityOwner;
+};

@@ -30,6 +30,5 @@ env.Append(CPPPATH=[os.getcwd() + "/irrlicht-svn/include"])
 #env.Replace(CXX=['clang++'])
 
 Export('env')
-Export('Glob')
 
 SConscript("src/SConscript")

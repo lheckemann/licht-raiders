@@ -8,8 +8,6 @@
 #include <cstring>
 #include <cassert>
 
-#include "object.h"
-
 using namespace irr;
 using irr::core::vector3df;
 
@@ -33,7 +31,7 @@ struct Pixel {
 	char B, G, R, A;
 };
 
-class Tile : public Object {
+class Tile {
 public:
 	Tiledata data;
 	scene::IMeshSceneNode *scn;

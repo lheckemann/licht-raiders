@@ -51,5 +51,5 @@ def exglob( includes = Split( '*' ), excludes = None, dir = '.'):
                # Probably need to check if this node is a directory
                nodes.append(gen_node(os.path.join(dir,os.path.basename(str(s)))))
    return nodes
-   
+
 Export('exglob')

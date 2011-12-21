@@ -27,7 +27,7 @@ video::IVideoDriver* driver;
 scene::ISceneManager* smgr;
 scene::ISceneCollisionManager* collMan;
 
-scene::IMeshSceneNode *selected_mesh = NULL;
+scene::ISceneNode *selected_node = NULL;
 
 Map *map;
 
