@@ -16,18 +16,31 @@ using irr::core::vector3df;
 #define get_index_for_tile(x, y, map) (y*map.width)+x
 #define get_coords_at_index(index, map) {map.width%index, map.width/index}
 
-extern std::vector<video::ITexture*> wallTextures;
-extern video::ITexture* selectedTex;
+extern std::vector<video::ITexture*> tileTextures;
+extern std::vector<video::ITexture*> tileTextures_sel;
 
 extern scene::IMesh *wallMesh;
 extern scene::IMesh *groundMesh;
 extern std::vector<scene::IMeshSceneNode*> tileSceneNodes;
 
-struct Tile{
+struct Tiledata {
 	uint32_t type;
 	uint32_t height;
 	uint32_t point;
 };
+
+struct Pixel {
+	char B, G, R, A;
+};
+
+class Tile {
+public:
+	Tiledata data;
+	scene::IMeshSceneNode *scn;
+	int id;
+	Tile(Tiledata, int, int, int);
+};
+
 
 class Map {
 public:
@@ -35,6 +48,7 @@ public:
 	void load_textures();
 	void calculate_render();
 	void load(FILE*);
+	std::vector<Tiledata> tiledatas;
 	std::vector<Tile> tiles;
 	uint32_t width, height;
 };
@@ -80,6 +94,3 @@ const bool tile_is_liquid[] = {
 };
 
 struct mapCoords {int x,y;};
-
-void load_textures();
-void calculate_render();

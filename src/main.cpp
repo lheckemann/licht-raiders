@@ -12,10 +12,6 @@
 #pragma comment(lib, "Irrlicht.lib")
 #pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #include <windows.h>
-#define Pass(ms) Sleep(ms)
-#else
-#include <unistd.h>
-#define Pass(ms) usleep(ms*1000)
 #endif
 
 using namespace irr;
@@ -42,18 +38,42 @@ void bork(std::string msg) {
 
 IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 	SIrrlichtCreationParameters params = SIrrlichtCreationParameters();
-	if (IrrlichtDevice::isDriverSupported(video::EDT_OPENGL)) {
-		params.DriverType = video::EDT_OPENGL;
-	}
-	else if (IrrlichtDevice::isDriverSupported(video::EDT_DIRECT3D9)) {
-		params.DriverType = video::EDT_DIRECT3D9;
-	}
-	else if (IrrlichtDevice::isDriverSupported(video::EDT_DIRECT3D8)) {
-		params.DriverType = video::EDT_DIRECT3D8;
+	if (UserConfig->read<bool>("display.hardwareDriverOnly", true)) {
+		if (IrrlichtDevice::isDriverSupported(video::EDT_OPENGL)) {
+			params.DriverType = video::EDT_OPENGL;
+		}
+		else if (IrrlichtDevice::isDriverSupported(video::EDT_DIRECT3D9)) {
+			params.DriverType = video::EDT_DIRECT3D9;
+		}
+		else if (IrrlichtDevice::isDriverSupported(video::EDT_DIRECT3D8)) {
+			params.DriverType = video::EDT_DIRECT3D8;
+		}
+		else {
+			printf("No suitable video driver found.\n");
+			return NULL;
+		}
 	}
 	else {
-		printf("No suitable video driver found.\n");
-		return NULL;
+		if (UserConfig->read<bool>("display.forceSoftwareDriver", false)) {
+			params.DriverType = video::EDT_BURNINGSVIDEO;
+		}
+		else {
+			if (IrrlichtDevice::isDriverSupported(video::EDT_OPENGL)) {
+				params.DriverType = video::EDT_OPENGL;
+			}
+			else if (IrrlichtDevice::isDriverSupported(video::EDT_DIRECT3D9)) {
+				params.DriverType = video::EDT_DIRECT3D9;
+			}
+			else if (IrrlichtDevice::isDriverSupported(video::EDT_DIRECT3D8)) {
+				params.DriverType = video::EDT_DIRECT3D8;
+			}
+			else if (IrrlichtDevice::isDriverSupported(video::EDT_BURNINGSVIDEO)) {
+				params.DriverType = video::EDT_BURNINGSVIDEO;
+			}
+			else {
+				bork("No suitable video driver found");
+			}
+		}
 	}
 
 	params.WindowSize = core::dimension2d<u32>(UserConfig->read<int>("display.width", 800), UserConfig->read<int>("display.height", 600));
@@ -175,7 +195,7 @@ int main() {
 
 	const io::path skyboxFilename ("data/textures/skybox/top.png");
 	video::ITexture *sb_tex = driver->getTexture(skyboxFilename);
-	//smgr->addSkyBoxSceneNode(sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, 0, DEFAULT_ID); XXX REACTIVATE
+	smgr->addSkyBoxSceneNode(sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, sb_tex, 0, DEFAULT_ID);
 
 /* T-Minus ten! */
 	ITimer* timer = device->getTimer();
@@ -241,14 +261,15 @@ int main() {
 			tempVec.rotateXZBy(camRot);
 			cam->setPosition(tempVec);
 
-			if(dummySceneNode) dummySceneNode->setMaterialTexture(1, 0);
+			if (dummySceneNode) dummySceneNode->setMaterialTexture(0, tileTextures[map->tiles[dummySceneNode->getID()-MAP_SCN_ID].data.type]);
 			dummySceneNode = collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, MAP_SCN_ID);
-			if(dummySceneNode) dummySceneNode->setMaterialTexture(1, selectedTex);
+			if (dummySceneNode) dummySceneNode->setMaterialTexture(0, tileTextures_sel[map->tiles[dummySceneNode->getID()-MAP_SCN_ID].data.type]);
+
 			if(receiver.IsKeyPressed(KEY_ESCAPE)) break;
 			if(frame % 400 == 0) printf("%i FPS\n", driver->getFPS());
 		}
 		else {
-			Pass(10);
+			device->sleep(10);
 		}
 	}
 	device->drop();

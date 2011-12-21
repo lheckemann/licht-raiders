@@ -1,7 +1,7 @@
 #include "map.h"
 
-std::vector<video::ITexture*> wallTextures;
-video::ITexture *selectedTex;
+std::vector<video::ITexture*> tileTextures;
+std::vector<video::ITexture*> tileTextures_sel;
 
 scene::IMesh *wallMesh;
 scene::IMesh *groundMesh;
@@ -9,7 +9,7 @@ std::vector<scene::IMeshSceneNode*> tileSceneNodes;
 
 
 void Map::load_tiles(FILE* map) {
-	Tile t;
+	Tiledata t;
 	uint32_t type, tileheight, point;
 	uint8_t tilesize, field;
 	char* check = new char[3];
@@ -39,7 +39,7 @@ void Map::load_tiles(FILE* map) {
 			t.height = tileheight;
 			t.point = point;
 		}
-		tiles.push_back(t);
+		tiledatas.push_back(t);
 	}
 }
 
@@ -50,54 +50,64 @@ void Map::load(FILE* map) {
 
 void Map::load_textures() {
 	io::path path;
+	char* selname = new char[10];
+	video::ITexture* active;
+	video::ITexture* active_selected;
+	unsigned char* texData;
+	unsigned char* texData_sel;
+	unsigned int pix;
 	for (unsigned i = 0; i < sizeof(texture_names)/sizeof(std::string); i++) {
 		path = ("data/textures/tile/" + texture_names[i] + ".png").c_str();
-		wallTextures.push_back(driver->getTexture(path));
-		if (*(wallTextures.end()-1) == NULL) {
+		active = driver->getTexture(path);
+		if (active == NULL) {
 			bork((path + " could not be loaded").c_str());
 		}
+		sprintf(selname, "SEL%i", i);
+		active_selected = driver->addTexture(active->getOriginalSize(), selname, active->getColorFormat());
+		switch(active->getColorFormat()) { // TODO: Implement other colour formats / fix this bloody mess
+			case video::ECF_A8R8G8B8:
+				texData = (unsigned char*) active->lock();
+				texData_sel = (unsigned char*) active_selected->lock();
+				for (pix = 0; pix < active->getOriginalSize().Width * active->getOriginalSize().Height; pix++) {
+					texData_sel[pix*4+0] = ((texData[pix*4+0] + 32) <= 32) ? 255 : texData[pix*4+0] + 32; // B
+					texData_sel[pix*4+1] = texData[pix*4+1]; // G
+					texData_sel[pix*4+2] = texData[pix*4+2]; // R
+					texData_sel[pix*4+3] = texData[pix*4+3]; // A stays what it is
+				}
+				active->unlock();
+				active_selected->unlock();
+				break;
+			default:
+				bork("Unsupported pixel format in last mentioned texture");
+		}
+		tileTextures.push_back(active);
+		tileTextures_sel.push_back(active_selected);
 	}
-	selectedTex = driver->addTexture(core::dimension2d<u32>(1,1), "WALL_SELMASK", video::ECF_A8R8G8B8);
-	char* texData = (char*) selectedTex->lock();
-	texData[0] = '\x80';
-	texData[1] = '\x00';
-	texData[2] = '\x00';
-	texData[3] = '\xff';
-	selectedTex->unlock();
 
 	wallMesh = smgr->getMesh("data/models/wall.dae");
 	groundMesh = smgr->getMesh("data/models/ground.dae");
 }
 
 
-#define index ((int)(i - tiles.begin()))
+#define getindex ((int)(i - tiledatas.begin()))
 void Map::calculate_render() {
 	load_textures();
-	std::vector<Tile>::iterator i;
+	std::vector<Tiledata>::iterator i;
 	mapCoords current;
 	current.x = 0;
 	current.y = 0;
+	int index;
 /*	mapCoords surround_coords[9];
 	int surround_indexes[9];
 	bool surround_walls[9];*/
-	scene::IMeshSceneNode *sceneNode;
-
-	for (i = tiles.begin(); i != tiles.end(); i++) {
-//		current = get_coords_at_index(i - tiles.begin(), *&this); // TODO fix get_coords_at_index macro
+	for (i = tiledatas.begin(); i != tiledatas.end(); i++) {
+		index = getindex;
+//		current = get_coords_at_index(i - tiledatas.begin(), *&this); // TODO fix get_coords_at_index macro
 		current.x = index % width;
 		current.y = index / width;
 
-		if (tile_is_wall[tiles[index].type]) {
-			sceneNode = smgr->addMeshSceneNode(wallMesh, 0, MAP_SCN_ID, vector3df(current.y*-2, 0, current.x*-2));
-		}
-		else {
-			sceneNode = smgr->addMeshSceneNode(groundMesh, 0, MAP_SCN_ID, vector3df(current.y*-2, 0, current.x*-2));
-		}
-		sceneNode->setMaterialTexture(0, wallTextures[tiles[index].type]);
-		sceneNode->setMaterialType(video::EMT_SOLID);
-		sceneNode->setMaterialFlag(video::EMF_LIGHTING, UserConfig.read<bool>("display.lighting", true));
-		sceneNode->setMaterialFlag(video::EMF_BILINEAR_FILTER, not UserConfig.read<bool>("display.minecraftmode", false)); // Minecraft!
-		tileSceneNodes.push_back(sceneNode);
+		tiles.push_back(Tile(tiledatas[index], current.x, current.y, index));
+
 		//	calculate surrounding coordinates
 /*		surround_coords = {
 			{current[0]-1, current[1]-1}, {current[0]  , current[1]-1}, {current[0]+1, current[1]-1},
@@ -107,11 +117,26 @@ void Map::calculate_render() {
 		// get wall bools
 		for (int x = 0; x < 9 ; ++x) {
 			surround_indexes[x] = get_index_for_tile(surround_coords[x][0], surround_coords[x][1]);
-			surround_types[x] = tile_is_wall[tiles[surround_indexes[x]].type];
+			surround_types[x] = tile_is_wall[tiledatas[surround_indexes[x]].type];
 		}*/
 	}
 }
 
+Tile::Tile(Tiledata _data, int x, int y, int _id) {
+	id = _id;
+	data = _data;
+	if (tile_is_wall[data.type]) {
+		scn = smgr->addMeshSceneNode(wallMesh, 0, MAP_SCN_ID+id, vector3df(y*-2, 0, x*-2));
+	}
+	else {
+		scn = smgr->addMeshSceneNode(groundMesh, 0, MAP_SCN_ID+id, vector3df(y*-2, 0, x*-2));
+	}
+	scn->setMaterialType(video::EMT_SOLID);
+	scn->setMaterialFlag(video::EMF_LIGHTING, UserConfig.read<bool>("display.lighting", true));
+	scn->setMaterialFlag(video::EMF_BILINEAR_FILTER, not UserConfig.read<bool>("display.minecraftmode", false)); // Minecraft!
+	scn->setMaterialTexture(0, tileTextures[data.type]);
+	tileSceneNodes.push_back(scn);
+}
 
 
 #if UNIT_TEST
@@ -121,7 +146,7 @@ int main () {
 	FILE* f;
 	f = fopen("test.map", "rb");
 	map.load(f);
-	std::vector<Tile>::iterator it = map.tiles.begin();
+	std::vector<Tiledata>::iterator it = map.tiledatas.begin();
 	int x, y;
 	for(x = 0; x<map.width ; x++) {
 		for (y = 0; y<map.height; y++) {

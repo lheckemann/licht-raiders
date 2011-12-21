@@ -32,7 +32,9 @@ bool EventReceiver::OnEvent(const SEvent& event)
 		case EET_GUI_EVENT: handleGUI(event); break;
 		case EET_MOUSE_INPUT_EVENT:
 			if(event.MouseInput.Event == EMIE_MOUSE_MOVED) {MousePosition.X = event.MouseInput.X; MousePosition.Y = event.MouseInput.Y;}
-			else if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) printf("Click @ %i, %i\n", MousePosition.X, MousePosition.Y);
+			else if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
+				// Put code to select tile / entity here!
+			}
 			break;
 		default: break;
 	}
