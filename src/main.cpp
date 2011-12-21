@@ -6,6 +6,7 @@
 
 #include "globs.h"
 #include "map.h"
+#include "entity.h"
 
 
 #ifdef _IRR_WINDOWS_
@@ -24,6 +25,11 @@ ConfigFile UserConfig;
 
 video::IVideoDriver* driver;
 scene::ISceneManager* smgr;
+scene::ISceneCollisionManager* collMan;
+
+scene::IMeshSceneNode *selected_mesh = NULL;
+
+Map *map;
 
 // I couldn't resist, alright? :D
 void bork(std::string msg) {
@@ -112,6 +118,7 @@ std::string get_userdata_path() {
 }
 
 int main() {
+
 	try {
 		UserConfig = ConfigFile(get_userdata_path() + "user.cfg");
 	}
@@ -138,7 +145,7 @@ int main() {
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
 	env = device->getGUIEnvironment();
-	scene::ISceneCollisionManager* collMan = smgr->getSceneCollisionManager();
+	collMan = smgr->getSceneCollisionManager();
 
 /* Set up GUI */
 	gui::IGUISkin* skin = env->getSkin();
@@ -178,7 +185,7 @@ int main() {
 	if (mapfile == NULL) {
 		bork("Could not open test map");
 	}
-	Map *map = new Map;
+	map = new Map;
 	map->load(mapfile);
 	fclose(mapfile);
 
@@ -206,7 +213,6 @@ int main() {
 	vector3df mousething;
 	scene::IMesh *arrowMesh = smgr->addArrowMesh("ITSANARROW", 0xFFFFFF, 0xFF0000);
 	scene::IMeshSceneNode *mouseNode = smgr->addMeshSceneNode(arrowMesh, 0, DEFAULT_ID);
-	scene::ISceneNode *dummySceneNode = NULL;
 	mouseNode->setRotation(vector3df(0, 0, 180));
 
 	core::line3df ray;
@@ -260,10 +266,6 @@ int main() {
 			tempVec = vector3df(-5,camHeight,0);
 			tempVec.rotateXZBy(camRot);
 			cam->setPosition(tempVec);
-
-			if (dummySceneNode) dummySceneNode->setMaterialTexture(0, tileTextures[map->tiles[dummySceneNode->getID()-MAP_SCN_ID].data.type]);
-			dummySceneNode = collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, MAP_SCN_ID);
-			if (dummySceneNode) dummySceneNode->setMaterialTexture(0, tileTextures_sel[map->tiles[dummySceneNode->getID()-MAP_SCN_ID].data.type]);
 
 			if(receiver.IsKeyPressed(KEY_ESCAPE)) break;
 			if(frame % 400 == 0) printf("%i FPS\n", driver->getFPS());

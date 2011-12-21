@@ -5,10 +5,10 @@
 #include <irrlicht.h>
 #include <string>
 #include <vector>
-#include "globs.h"
-
 #include <cstring>
 #include <cassert>
+
+#include "object.h"
 
 using namespace irr;
 using irr::core::vector3df;
@@ -33,12 +33,11 @@ struct Pixel {
 	char B, G, R, A;
 };
 
-class Tile {
+class Tile : public Object {
 public:
 	Tiledata data;
 	scene::IMeshSceneNode *scn;
-	int id;
-	Tile(Tiledata, int, int, int);
+	Tile(Tiledata, int, int);
 };
 
 
@@ -49,7 +48,7 @@ public:
 	void calculate_render();
 	void load(FILE*);
 	std::vector<Tiledata> tiledatas;
-	std::vector<Tile> tiles;
+	std::vector<Tile*> tiles;
 	uint32_t width, height;
 };
 

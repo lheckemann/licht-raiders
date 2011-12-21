@@ -33,6 +33,9 @@ bool EventReceiver::OnEvent(const SEvent& event)
 		case EET_MOUSE_INPUT_EVENT:
 			if(event.MouseInput.Event == EMIE_MOUSE_MOVED) {MousePosition.X = event.MouseInput.X; MousePosition.Y = event.MouseInput.Y;}
 			else if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
+				if (selected_mesh) selected_mesh->setMaterialTexture(0, tileTextures[((Tile*) selected_mesh->getUserData())->data.type]);
+				selected_mesh = (scene::IMeshSceneNode*) collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, ID_SELECTABLE);
+				if (selected_mesh) selected_mesh->setMaterialTexture(0, tileTextures_sel[((Tile*) selected_mesh->getUserData())->data.type]);
 				// Put code to select tile / entity here!
 			}
 			break;

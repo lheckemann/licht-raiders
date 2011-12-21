@@ -1,10 +1,10 @@
 #!/usr/bin/python -c "pass"
-# ^ Trick for syntax highlighting in gedit...
+# ^ Trick for syntax highlighting.
 
 env = Environment()
 conf = Configure(env)
 
-LIBS=['Irrlicht', 'boost_filesystem', 'boost_system']
+LIBS=['boost_filesystem', 'boost_system', 'GL']
 
 SConscript("scons_exglob.py")
 
@@ -15,13 +15,17 @@ for lib in LIBS:
 
 env = conf.Finish()
 
-import os
-if os.path.isdir("/usr/local/include/irrlicht"):
-	env.Append(CPPFLAGS=['-I/usr/local/include/irrlicht'])
-elif os.path.isdir("/usr/include/irrlicht"):
-	env.Append(CPPFLAGS=['-I/usr/include/irrlicht'])
-
 env.Append(CXXFLAGS=['-ggdb', '-g3', '-Wall'])
+import os
+if not os.path.isdir("./irrlicht-svn"):
+	print "Irrlicht seems not to be present. Run get-irrlicht.sh if possible."
+if not os.path.exists("./irrlicht-svn/lib/Linux/libIrrlicht.a"):
+	print "Irrlicht not compiled."
+	os.chdir("irrlicht-svn/source/Irrlicht")
+	os.system("make")
+env.Append(LIBPATH=[os.getcwd() + "/irrlicht-svn/lib/Linux"])
+env.Append(LIBS=["Irrlicht"])
+env.Append(CPPPATH=[os.getcwd() + "/irrlicht-svn/include"])
 #env.Append(CPPFLAGS=['-DBE_POLITE'])
 #env.Replace(CXX=['clang++'])
 

@@ -11,9 +11,7 @@
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_images>
-    <image id="ground_png" name="ground_png">
-      <init_from>ground.png</init_from>
-    </image>
+    <image id="ground_png" name="ground_png"></image>
   </library_images>
   <library_effects>
     <effect id="Material-effect">

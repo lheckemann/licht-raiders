@@ -5,8 +5,6 @@
 using irr::core::vector3df;
 
 class Entity {
-private:
-	int id;
 public:
 	Entity();
 };

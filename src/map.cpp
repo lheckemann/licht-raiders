@@ -1,4 +1,5 @@
 #include "map.h"
+#include "globs.h"
 
 std::vector<video::ITexture*> tileTextures;
 std::vector<video::ITexture*> tileTextures_sel;
@@ -97,6 +98,7 @@ void Map::calculate_render() {
 	current.x = 0;
 	current.y = 0;
 	int index;
+	Tile* tile;
 /*	mapCoords surround_coords[9];
 	int surround_indexes[9];
 	bool surround_walls[9];*/
@@ -106,7 +108,9 @@ void Map::calculate_render() {
 		current.x = index % width;
 		current.y = index / width;
 
-		tiles.push_back(Tile(tiledatas[index], current.x, current.y, index));
+		tile = new Tile(tiledatas[index], current.x, current.y);
+
+		tiles.push_back(tile);
 
 		//	calculate surrounding coordinates
 /*		surround_coords = {
@@ -122,19 +126,19 @@ void Map::calculate_render() {
 	}
 }
 
-Tile::Tile(Tiledata _data, int x, int y, int _id) {
-	id = _id;
+Tile::Tile(Tiledata _data, int x, int y) {
 	data = _data;
 	if (tile_is_wall[data.type]) {
-		scn = smgr->addMeshSceneNode(wallMesh, 0, MAP_SCN_ID+id, vector3df(y*-2, 0, x*-2));
+		scn = smgr->addMeshSceneNode(wallMesh, 0, ID_SELECTABLE, vector3df(y*-2, 0, x*-2));
 	}
 	else {
-		scn = smgr->addMeshSceneNode(groundMesh, 0, MAP_SCN_ID+id, vector3df(y*-2, 0, x*-2));
+		scn = smgr->addMeshSceneNode(groundMesh, 0, ID_SELECTABLE, vector3df(y*-2, 0, x*-2));
 	}
 	scn->setMaterialType(video::EMT_SOLID);
 	scn->setMaterialFlag(video::EMF_LIGHTING, UserConfig.read<bool>("display.lighting", true));
 	scn->setMaterialFlag(video::EMF_BILINEAR_FILTER, not UserConfig.read<bool>("display.minecraftmode", false)); // Minecraft!
 	scn->setMaterialTexture(0, tileTextures[data.type]);
+	scn->setUserData(this);
 	tileSceneNodes.push_back(scn);
 }
 
