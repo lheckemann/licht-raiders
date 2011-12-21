@@ -19,8 +19,7 @@ env.Append(CXXFLAGS=['-ggdb', '-g3', '-Wall'])
 import os
 if not os.path.isdir("./irrlicht-svn"):
 	print "Irrlicht seems not to be present. Run get_irrlicht.sh if possible."
-	import sys
-	sys.exit()
+	Exit(1)
 if not os.path.exists("./irrlicht-svn/lib/Linux/libIrrlicht.a"):
 	print "Irrlicht not compiled."
 	os.chdir("irrlicht-svn/source/Irrlicht")
