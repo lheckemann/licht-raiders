@@ -24,7 +24,7 @@ if not os.path.isdir("./irrlicht-svn"):
 if not os.path.exists("./irrlicht-svn/lib/Linux/libIrrlicht.a"):
 	print "Irrlicht not compiled."
 	os.chdir("irrlicht-svn/source/Irrlicht")
-	os.system("make")
+	os.system("make -j%d" % (env.GetOption("num_jobs")))
 env.Append(LIBPATH=[os.getcwd() + "/irrlicht-svn/lib/Linux"])
 env.Append(LIBS=["Irrlicht"])
 env.Append(CPPPATH=[os.getcwd() + "/irrlicht-svn/include"])
