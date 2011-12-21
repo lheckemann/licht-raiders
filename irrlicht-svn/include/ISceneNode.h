@@ -55,7 +55,6 @@ namespace scene
 				parent->addChild(this);
 
 			updateAbsolutePosition();
-			UserData = NULL;
 		}
 
 
@@ -738,20 +737,6 @@ namespace scene
 		/** \return The node's scene manager. */
 		virtual ISceneManager* getSceneManager(void) const { return SceneManager; }
 
-		//! Set User Data
-		/** \param data The data to set it to. */
-		inline virtual void setUserData(void *data)
-		{
-			UserData = data;
-		}
-
-		//! Get User Data
-		/** \return The data. */
-		inline virtual void *getUserData()
-		{
-			return UserData;
-		}
-
 	protected:
 
 		//! A clone function for the ISceneNode members.
@@ -853,9 +838,6 @@ namespace scene
 
 		//! Is debug object?
 		bool IsDebugObject;
-
-		//! User data
-		void* UserData;
 	};
 
 
