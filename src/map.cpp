@@ -104,7 +104,7 @@ void Map::calculate_render() {
 	bool surround_walls[9];*/
 	for (i = tiledatas.begin(); i != tiledatas.end(); i++) {
 		index = getindex;
-//		current = get_coords_at_index(i - tiledatas.begin(), *&this); // TODO fix get_coords_at_index macro
+//		current = get_coords_at_index(i - tiledatas.begin(), *&this);
 		current.x = index % width;
 		current.y = index / width;
 
