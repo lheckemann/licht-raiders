@@ -13,8 +13,9 @@ public:
 	Entity(Entity*);
 	Entity(vector2df);
 	scene::IAnimatedMeshSceneNode *node;
-	vector2df map_position;
+	void setTarget(vector2df);
 private:
 	scene::IAnimatedMesh *mesh;
 	const static io::path meshName;
+	vector2df map_position;
 };

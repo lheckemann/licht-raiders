@@ -142,7 +142,7 @@ Tile::Tile(Tiledata _data, int _x, int _y) {
 	scn->setMaterialFlag(video::EMF_BILINEAR_FILTER, not UserConfig.read<bool>("display.minecraftmode", false)); // Minecraft!
 	scn->setMaterialTexture(0, tileTextures[data.type]);
 	NodeOwner *own = new NodeOwner;
-	own->ownerType = NodeOwner::NOT_TILE;
+	own->ownerType = NodeOwner::TYPE_TILE;
 	own->tileOwner = this;
 	scn->setUserData(own);
 	tileSceneNodes.push_back(scn);

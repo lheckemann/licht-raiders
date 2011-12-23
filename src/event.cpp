@@ -25,8 +25,6 @@ void handleGUI(const SEvent& event) {
 }
 
 NodeOwner *selected_owner = NULL;
-//video::SColorf* selected = new video::SColorf(0, 1, 0);
-//video::SColorf* notSelected = new video::SColorf(0, 0, 0);
 bool EventReceiver::OnEvent(const SEvent& event)
 {
 	switch(event.EventType) {
@@ -36,14 +34,16 @@ bool EventReceiver::OnEvent(const SEvent& event)
 			if(event.MouseInput.Event == EMIE_MOUSE_MOVED) {MousePosition.X = event.MouseInput.X; MousePosition.Y = event.MouseInput.Y;}
 			else if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
 				if (selected_owner) {
-					if (selected_owner->ownerType == NodeOwner::NOT_TILE) selected_node->setMaterialTexture(0, tileTextures[selected_owner->tileOwner->data.type]);
-					if (selected_owner->ownerType == NodeOwner::NOT_ENTITY) selected_node->setMaterialFlag(video::EMF_LIGHTING, true);
+					if (selected_owner->ownerType == NodeOwner::TYPE_TILE) selected_node->setMaterialTexture(0, tileTextures[selected_owner->tileOwner->data.type]);
+					if (selected_owner->ownerType == NodeOwner::TYPE_ENTITY) {
+						if (selected_node->getMaterialCount() >= 1) selected_node->getMaterial(0).AmbientColor = 0x000000;
+					}
 				}
 				selected_node = collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, ID_SELECTABLE);
 				selected_owner = (NodeOwner*) selected_node->getUserData();
 				if (selected_owner) {
-					if (selected_owner->ownerType == NodeOwner::NOT_TILE) selected_node->setMaterialTexture(0, tileTextures_sel[selected_owner->tileOwner->data.type]);
-					if (selected_owner->ownerType == NodeOwner::NOT_ENTITY) {
+					if (selected_owner->ownerType == NodeOwner::TYPE_TILE) selected_node->setMaterialTexture(0, tileTextures_sel[selected_owner->tileOwner->data.type]);
+					if (selected_owner->ownerType == NodeOwner::TYPE_ENTITY) {
 						if (selected_node->getMaterialCount() >= 1) selected_node->getMaterial(0).AmbientColor = 0x00FF00;
 					}
 				}

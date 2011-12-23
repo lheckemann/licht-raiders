@@ -16,7 +16,7 @@ Entity::Entity(vector2df origin) {
 	node = smgr->addAnimatedMeshSceneNode(mesh);
 	node->setPosition(globalPos);
 	NodeOwner *x = new NodeOwner;
-	x->ownerType = NodeOwner::NOT_ENTITY;
+	x->ownerType = NodeOwner::TYPE_ENTITY;
 	x->entityOwner = this;
 	node->setUserData(x);
 }
