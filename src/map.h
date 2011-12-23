@@ -14,6 +14,8 @@ using irr::core::vector3df;
 #define get_index_for_tile(x, y, map) (y*map.width)+x
 #define get_coords_at_index(index, map) {map.width%index, map.width/index}
 
+#define TILE_SIZE 16
+
 extern std::vector<video::ITexture*> tileTextures;
 extern std::vector<video::ITexture*> tileTextures_sel;
 
@@ -36,6 +38,7 @@ public:
 	Tiledata data;
 	scene::IMeshSceneNode *scn;
 	Tile(Tiledata, int, int);
+	int x, y;
 };
 
 

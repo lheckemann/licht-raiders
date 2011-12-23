@@ -126,13 +126,16 @@ void Map::calculate_render() {
 	}
 }
 
-Tile::Tile(Tiledata _data, int x, int y) {
+Tile::Tile(Tiledata _data, int _x, int _y) {
 	data = _data;
+	x = _x;
+	y = _y;
+	vector3df tilePos(y*TILE_SIZE, 0, x*TILE_SIZE);
 	if (tile_is_wall[data.type]) {
-		scn = smgr->addMeshSceneNode(wallMesh, 0, ID_SELECTABLE, vector3df(y*-2, 0, x*-2));
+		scn = smgr->addMeshSceneNode(wallMesh, 0, ID_SELECTABLE, tilePos);
 	}
 	else {
-		scn = smgr->addMeshSceneNode(groundMesh, 0, ID_SELECTABLE, vector3df(y*-2, 0, x*-2));
+		scn = smgr->addMeshSceneNode(groundMesh, 0, ID_SELECTABLE, tilePos);
 	}
 	scn->setMaterialType(video::EMT_SOLID);
 	scn->setMaterialFlag(video::EMF_LIGHTING, UserConfig.read<bool>("display.lighting", true));

@@ -35,11 +35,18 @@ bool EventReceiver::OnEvent(const SEvent& event)
 			else if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
 				if (selected_owner) {
 					if (selected_owner->ownerType == NodeOwner::NOT_TILE) selected_node->setMaterialTexture(0, tileTextures[selected_owner->tileOwner->data.type]);
+					if (selected_owner->ownerType == NodeOwner::NOT_ENTITY) selected_node->setMaterialFlag(video::EMF_LIGHTING, true);
 				}
 				selected_node = collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, ID_SELECTABLE);
 				selected_owner = (NodeOwner*) selected_node->getUserData();
 				if (selected_owner) {
 					if (selected_owner->ownerType == NodeOwner::NOT_TILE) selected_node->setMaterialTexture(0, tileTextures_sel[selected_owner->tileOwner->data.type]);
+					if (selected_owner->ownerType == NodeOwner::NOT_ENTITY) selected_node->setMaterialFlag(video::EMF_LIGHTING, false);
+				}
+			}
+			else if (event.MouseInput.Event == EMIE_RMOUSE_PRESSED_DOWN) {
+				if (selected_owner and selected_owner->ownerType == NodeOwner::NOT_ENTITY) {
+					selected_node->setPosition(collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, ID_SELECTABLE)->getPosition());
 				}
 			}
 			break;

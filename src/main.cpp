@@ -17,8 +17,8 @@
 
 using namespace irr;
 using core::vector3df;
+using core::vector2df;
 using video::SColor;
-using core::rect;
 
 EventReceiver receiver;
 ConfigFile UserConfig;
@@ -118,7 +118,6 @@ std::string get_userdata_path() {
 }
 
 int main() {
-
 	try {
 		UserConfig = ConfigFile(get_userdata_path() + "user.cfg");
 	}
@@ -164,19 +163,22 @@ int main() {
 	userControls.cam_rot_cw = (EKEY_CODE) UserConfig.read<int>("keys.camera_rot_cw", KEY_KEY_Z);
 	userControls.cam_rot_acw = (EKEY_CODE) UserConfig.read<int>("keys.camera_rot_acw", KEY_KEY_X);
 
+	float camSpeed;
+	camSpeed = UserConfig.read("controls.camSpeed", 2.0f);
+
 /* Set up camera */
 
 	scene::ISceneNode *cam_base = smgr->addEmptySceneNode(0, DEFAULT_ID);
-	scene::ICameraSceneNode *cam = smgr->addCameraSceneNode(cam_base, vector3df(0, 10, -2), vector3df(0, 0, 0), DEFAULT_ID);
-	cam->setPosition(core::vector3df(-5,18,0));
+	scene::ICameraSceneNode *cam = smgr->addCameraSceneNode(cam_base, vector3df(0, 20, -2), vector3df(0, 0, 0), DEFAULT_ID);
 	cam->setTarget(core::vector3df(0,0,0));
 	cam->setFarValue(42000.0f);
+	cam->setNearValue(0.0625f);
 
 	vector3df camMove(0, 0, 0);
 	vector3df camPos = cam->getPosition();
 	vector3df camTarget = cam->getTarget();
 	float camRot = 0;
-	float camHeight = 5;
+	float camHeight = 20;
 	vector3df tempVec; // Used for miscellaneous things, just as a temporary vec3df storage
 
 /* Map */
@@ -192,11 +194,8 @@ int main() {
 /* Set up lighting */
 
 	smgr->setAmbientLight(SColor(0x000000));
-	scene::ILightSceneNode *groundLight = smgr->addLightSceneNode(0, vector3df(0,0,0), SColor(0xffffff), 10.0f, DEFAULT_ID);
-	scene::ILightSceneNode *groundLight2 = smgr->addLightSceneNode(0, vector3df(0,0,0), SColor(0xffffff), 10.0f, DEFAULT_ID);
-	scene::ILightSceneNode *raisedLight = smgr->addLightSceneNode(groundLight, vector3df(0,5,0), SColor(0xffffff), 10.0f, DEFAULT_ID);
-	scene::ILightSceneNode *raisedLight2 = smgr->addLightSceneNode(groundLight2, vector3df(0,5,0), SColor(0xffffff), 10.0f, DEFAULT_ID);
-
+	scene::ILightSceneNode *light = smgr->addLightSceneNode(0, vector3df(0,30,0), SColor(0xffffff), 160.0f, DEFAULT_ID);
+	scene::ILightSceneNode *light2 = smgr->addLightSceneNode(0, vector3df(0,30,0), SColor(0xffffff), 160.0f, DEFAULT_ID);
 
 /* Set up skybox */
 
@@ -211,12 +210,14 @@ int main() {
 	unsigned int lastUpdate = 0;
 	int frame = 0;
 	vector3df mousething;
-	scene::IMesh *arrowMesh = smgr->addArrowMesh("ITSANARROW", 0xFFFFFF, 0xFF0000);
-	scene::IMeshSceneNode *mouseNode = smgr->addMeshSceneNode(arrowMesh, 0, DEFAULT_ID);
-	mouseNode->setRotation(vector3df(0, 0, 180));
+//	scene::IMesh *arrowMesh = smgr->addArrowMesh("ITSANARROW", 0xFFFFFF, 0xFF0000);
+//	scene::IMeshSceneNode *mouseNode = smgr->addMeshSceneNode(arrowMesh, 0, DEFAULT_ID); // Put this back once we implement entity movement
+//	mouseNode->setRotation(vector3df(0, 0, 180));
 
 	core::line3df ray;
 	core::triangle3df dummyTri;
+
+	Entity randomEntity(vector2df(1, 1));
 /* We have liftoff! */
 	while (device->run()) {
 		now = timer->getTime();
@@ -230,22 +231,22 @@ int main() {
 
 			camMove.set(0, 0, 0);
 			if (receiver.IsKeyPressed(userControls.cam_up)) {
-				camMove.X = 0.1;
+				camMove.X = -camSpeed;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_down)) {
-				camMove.X = -0.1;
+				camMove.X = camSpeed;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_left)) {
-				camMove.Z = 0.1;
+				camMove.Z = -camSpeed;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_right)) {
-				camMove.Z = -0.1;
+				camMove.Z = camSpeed;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_raise)) {
-				camHeight += 0.1;
+				camHeight += camSpeed;
 			}
 			if (receiver.IsKeyPressed(userControls.cam_lower)) {
-				camHeight -= 0.1;
+				camHeight -= camSpeed;
 			}
 			camMove.rotateXZBy(camRot);
 			camPos = cam_base->getPosition();
@@ -254,8 +255,10 @@ int main() {
 			camTarget += camMove;
 			cam_base->setPosition(camPos);
 			cam->setTarget(camTarget);
-			groundLight->setPosition(camPos);
-			groundLight2->setPosition(camTarget);
+			camPos = cam->getAbsolutePosition(); // Does reusing this variable for this count as bad? Does mah face look bovvered?
+			camPos.Y = light->getPosition().Y;
+			light->setPosition(camPos);
+			light2->setPosition(camTarget);
 
 			if (receiver.IsKeyPressed(userControls.cam_rot_cw)) {
 				camRot -= 1;
@@ -263,7 +266,7 @@ int main() {
 			if (receiver.IsKeyPressed(userControls.cam_rot_acw)) {
 				camRot += 1;
 			}
-			tempVec = vector3df(-5,camHeight,0);
+			tempVec = vector3df(50,camHeight,0);
 			tempVec.rotateXZBy(camRot);
 			cam->setPosition(tempVec);
 
