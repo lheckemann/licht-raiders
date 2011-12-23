@@ -6,13 +6,13 @@ test -d source || (echo "Error: irrlicht-svn/source seems not to exist." ; exit 
 test -d lib || (echo "Error: irrlicht-svn/lib seems not to exist." ; exit -1)
 test -d include || (echo "Error: irrlicht-svn/include seems not to exist." ; exit -1)
 cd source
-svn up --set-depth infinity > /dev/null
+svn up --set-depth infinity
 cd ..
 cd lib
-svn up --set-depth infinity > /dev/null
+svn up --set-depth infinity
 cd ..
 cd include
-svn up --set-depth infinity > /dev/null
+svn up --set-depth infinity
 cd ..
 patch -p0 -i ../irrlicht-mods.diff || (echo "Error: couldn't apply patch to irrlicht sources." ; exit -1)
 cd ..
