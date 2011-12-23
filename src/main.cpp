@@ -193,7 +193,7 @@ int main() {
 
 /* Set up lighting */
 
-	smgr->setAmbientLight(SColor(0x000000));
+	smgr->setAmbientLight(SColor(0xFFFFFF));
 	scene::ILightSceneNode *light = smgr->addLightSceneNode(0, vector3df(0,30,0), SColor(0xffffff), 160.0f, DEFAULT_ID);
 	scene::ILightSceneNode *light2 = smgr->addLightSceneNode(0, vector3df(0,30,0), SColor(0xffffff), 160.0f, DEFAULT_ID);
 
