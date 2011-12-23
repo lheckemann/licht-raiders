@@ -5,13 +5,15 @@
       <author>Blender User</author>
       <authoring_tool>Blender 2.60.4 r41939</authoring_tool>
     </contributor>
-    <created>2011-12-18T16:40:49</created>
-    <modified>2011-12-18T16:40:49</modified>
+    <created>2011-12-23T13:24:38</created>
+    <modified>2011-12-23T13:24:38</modified>
     <unit name="meter" meter="1"/>
     <up_axis>Z_UP</up_axis>
   </asset>
   <library_images>
-    <image id="ground_png" name="ground_png"></image>
+    <image id="ground_png" name="ground_png">
+      <init_from>ground.png</init_from>
+    </image>
   </library_images>
   <library_effects>
     <effect id="Material-effect">
@@ -66,7 +68,7 @@
     <geometry id="Cube-mesh">
       <mesh>
         <source id="Cube-mesh-positions">
-          <float_array id="Cube-mesh-positions-array" count="24">1 1 -1 1 -1 -1 -1 -0.9999998 -1 -0.9999997 1 -1 1 0.9999995 1 0.9999994 -1.000001 1 -1 -0.9999997 1 -1 1 1</float_array>
+          <float_array id="Cube-mesh-positions-array" count="24">8.000001 8 0 8.000001 -8 0 -8.000001 -7.999998 0 -7.999997 8.000003 0 8.000004 7.999996 16 7.999995 -8.000005 16 -8.000003 -7.999997 16 -7.999999 8.000001 16</float_array>
           <technique_common>
             <accessor source="#Cube-mesh-positions-array" count="8" stride="3">
               <param name="X" type="float"/>
@@ -76,7 +78,7 @@
           </technique_common>
         </source>
         <source id="Cube-mesh-normals">
-          <float_array id="Cube-mesh-normals-array" count="18">0 0 -1 0 0 1 1 -2.83122e-7 0 -2.83122e-7 -1 0 -1 2.23517e-7 -1.3411e-7 2.38419e-7 1 2.08616e-7</float_array>
+          <float_array id="Cube-mesh-normals-array" count="18">0 0 -1 0 0 1 1 -2.68221e-7 0 -2.83122e-7 -1 -1.34111e-7 -1 2.5332e-7 -1.3411e-7 2.38419e-7 1 1.78814e-7</float_array>
           <technique_common>
             <accessor source="#Cube-mesh-normals-array" count="6" stride="3">
               <param name="X" type="float"/>
