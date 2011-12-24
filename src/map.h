@@ -93,4 +93,4 @@ const bool tile_is_liquid[] = {
 	true
 };
 
-struct mapCoords {int x,y;};
+struct mapCoords {unsigned int x,y;};

@@ -7,7 +7,7 @@ ConfigFile = env.Object('ConfigFile.cpp')
 event = env.Object("event.cpp")
 Map = env.Object("map.cpp")
 entity = env.Object("entity.cpp")
-
+astar = env.Object("astar.cpp")
 SConscript("entity/SConscript")
 Import('Ents')
 
