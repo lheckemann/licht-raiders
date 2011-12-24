@@ -25,7 +25,7 @@ Entity::Entity(Entity* origin) {
 	Entity(origin->map_position);
 }
 
-bool Entity::setTarget(const vector2df targ) {
+bool Entity::setTarget(vector2df targ) {
     // TODO pathfinding code
     // convert the path into coordinates
     // mapposition converted to tile coords, skip first tile -> next tile ... -> skip last tile, directly go to targ

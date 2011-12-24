@@ -12,12 +12,10 @@ public:
 	Entity(Entity*);
 	Entity(vector2df);
 	scene::IAnimatedMeshSceneNode *node;
-	vector2df map_position;
 	vector2df target;
 	std::deque<vector2df> path;
-	bool setTarget(const vector2df targ);
+	bool setTarget(vector2df targ);
 	void update();
-	void setTarget(vector2df);
 private:
 	scene::IAnimatedMesh *mesh;
 	const static io::path meshName;
