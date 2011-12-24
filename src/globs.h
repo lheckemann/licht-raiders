@@ -31,8 +31,8 @@ extern Map *map;
 
 struct NodeOwner {
 	enum NODE_OWNER_TYPE {
-		NOT_TILE,
-		NOT_ENTITY
+		TYPE_TILE,
+		TYPE_ENTITY
 	} ownerType;
 	Tile* tileOwner;
 	Entity* entityOwner;

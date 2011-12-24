@@ -17,7 +17,9 @@ public:
 	std::deque<vector2df> path;
 	bool setTarget(const vector2df targ);
 	void update();
+	void setTarget(vector2df);
 private:
 	scene::IAnimatedMesh *mesh;
 	const static io::path meshName;
+	vector2df map_position;
 };
