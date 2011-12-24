@@ -94,9 +94,9 @@ void Map::load_textures() {
 void Map::calculate_render() {
 	load_textures();
 	std::vector<Tiledata>::iterator i;
-	mapCoords current;
-	current.x = 0;
-	current.y = 0;
+	core::vector2di current;
+	current.X = 0;
+	current.Y = 0;
 	int index;
 	Tile* tile;
 /*	mapCoords surround_coords[9];
@@ -105,10 +105,10 @@ void Map::calculate_render() {
 	for (i = tiledatas.begin(); i != tiledatas.end(); i++) {
 		index = getindex;
 //		current = get_coords_at_index(i - tiledatas.begin(), *&this);
-		current.x = index % width;
-		current.y = index / width;
+		current.X = index % width;
+		current.Y = index / width;
 
-		tile = new Tile(tiledatas[index], current.x, current.y);
+		tile = new Tile(tiledatas[index], current.X, current.Y);
 
 		tiles.push_back(tile);
 

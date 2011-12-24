@@ -48,11 +48,17 @@ bool EventReceiver::OnEvent(const SEvent& event)
 					}
 				}
 			}
-/*			else if (event.MouseInput.Event == EMIE_RMOUSE_PRESSED_DOWN) {
-				if (selected_owner and selected_owner->ownerType == NodeOwner::NOT_ENTITY) {
-					selected_node->setPosition(collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, ID_SELECTABLE)->getPosition());
+			else if (event.MouseInput.Event == EMIE_RMOUSE_PRESSED_DOWN) {
+				if (selected_owner and selected_owner->ownerType == NodeOwner::TYPE_ENTITY) {
+					scene::ISceneNode *targ = collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, ID_SELECTABLE);
+					if (	targ // valid node clicked on
+							and ((NodeOwner*) targ->getUserData())->ownerType == NodeOwner::TYPE_TILE // it was a tile
+							and not tile_is_wall[((NodeOwner*) targ->getUserData())->tileOwner->data.type]) // the entity can actually go there (TODO make this take into account the entitie's abilities)
+					{
+						selected_owner->entityOwner->setTarget(((NodeOwner*) targ->getUserData())->tileOwner);
+					}
 				}
-			}*/
+			}
 			break;
 		default: break;
 	}

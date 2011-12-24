@@ -25,15 +25,16 @@ Entity::Entity(Entity* origin) {
 	Entity(origin->map_position);
 }
 
-bool Entity::setTarget(vector2df targ) {
+bool Entity::setTarget(Tile* endtile) {
     // TODO pathfinding code
     // convert the path into coordinates
     // mapposition converted to tile coords, skip first tile -> next tile ... -> skip last tile, directly go to targ
     // optional: bezier curves :)
-    target = targ;
-    
-    Tile* starttile = map->tiles[map_position.Y/TILE_SIZE+map_position.X/TILE_SIZE];
-    Tile* endtile = map->tiles[targ.X/TILE_SIZE+targ.X/TILE_SIZE];
+    target = vector2df(endtile->x, endtile->y);
+
+	int tile_x = (int) map_position.X, tile_y = (int) map_position.Y;
+
+    Tile* starttile = map->tiles[tile_y*map->width + tile_x];
     std::deque<Tile*> tilepath = calculate_path(starttile, endtile);
     std::deque<Tile*>::iterator itr;
     vector2df coords;

@@ -2,6 +2,7 @@
 #include <irrlicht.h>
 #include <string>
 #include <deque>
+#include "map.h"
 #define FALLBACK_MESH_NAME "data/models/can.dae"
 
 using namespace irr;
@@ -14,7 +15,7 @@ public:
 	scene::IAnimatedMeshSceneNode *node;
 	vector2df target;
 	std::deque<vector2df> path;
-	bool setTarget(vector2df targ);
+	bool setTarget(Tile*);
 	void update();
 private:
 	scene::IAnimatedMesh *mesh;
