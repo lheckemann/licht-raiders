@@ -4,7 +4,7 @@
 env = Environment()
 conf = Configure(env)
 
-LIBS=['boost_filesystem', 'boost_system', 'GL']
+LIBS=['boost_filesystem', 'boost_system', 'GL', 'X11']
 
 SConscript("scons_exglob.py")
 
@@ -26,7 +26,7 @@ if not os.path.exists("./irrlicht-svn/lib/Linux/libIrrlicht.a"):
 	os.system("make -j%d" % (env.GetOption("num_jobs")))
 	os.chdir("../../../")
 env.Append(LIBPATH=[os.getcwd() + "/irrlicht-svn/lib/Linux"])
-env.Append(LIBS=["Irrlicht"])
+env.Prepend(LIBS=["Irrlicht"]) # must be prepended because it depends on GL and X11
 env.Append(CPPPATH=[os.getcwd() + "/irrlicht-svn/include"])
 env.Append(CPPFLAGS=['-DBE_POLITE'])
 #env.Replace(CXX=['clang++'])
