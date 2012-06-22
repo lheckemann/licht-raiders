@@ -28,7 +28,7 @@ if not os.path.exists("./irrlicht-svn/lib/Linux/libIrrlicht.a"):
 env.Append(LIBPATH=[os.getcwd() + "/irrlicht-svn/lib/Linux"])
 env.Append(LIBS=["Irrlicht"])
 env.Append(CPPPATH=[os.getcwd() + "/irrlicht-svn/include"])
-#env.Append(CPPFLAGS=['-DBE_POLITE'])
+env.Append(CPPFLAGS=['-DBE_POLITE'])
 #env.Replace(CXX=['clang++'])
 
 Export('env')

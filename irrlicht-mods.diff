@@ -1,6 +1,6 @@
 Index: include/ISceneNode.h
 ===================================================================
---- include/ISceneNode.h	(revision 4020)
+--- include/ISceneNode.h	(revision 4199)
 +++ include/ISceneNode.h	(working copy)
 @@ -55,6 +55,7 @@
  				parent->addChild(this);
@@ -10,7 +10,7 @@ Index: include/ISceneNode.h
  		}
  
  
-@@ -737,6 +738,20 @@
+@@ -747,6 +748,20 @@
  		/** \return The node's scene manager. */
  		virtual ISceneManager* getSceneManager(void) const { return SceneManager; }
  
@@ -31,7 +31,7 @@ Index: include/ISceneNode.h
  	protected:
  
  		//! A clone function for the ISceneNode members.
-@@ -838,6 +853,9 @@
+@@ -848,6 +863,9 @@
  
  		//! Is debug object?
  		bool IsDebugObject;

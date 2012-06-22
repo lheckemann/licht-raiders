@@ -40,7 +40,8 @@ bool EventReceiver::OnEvent(const SEvent& event)
 					}
 				}
 				selected_node = collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, ID_SELECTABLE);
-				selected_owner = (NodeOwner*) selected_node->getUserData();
+				if (selected_node) selected_owner = (NodeOwner*) selected_node->getUserData();
+				else selected_owner = NULL;
 				if (selected_owner) {
 					if (selected_owner->ownerType == NodeOwner::TYPE_TILE) selected_node->setMaterialTexture(0, tileTextures_sel[selected_owner->tileOwner->data.type]);
 					if (selected_owner->ownerType == NodeOwner::TYPE_ENTITY) {
