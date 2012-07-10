@@ -2,7 +2,8 @@
 #include "globs.h"
 
 std::vector<video::ITexture*> tileTextures;
-std::vector<video::ITexture*> tileTextures_sel;
+video::ITexture *selected_tex;
+video::ITexture *unselected_tex;
 
 scene::IMesh *wallMesh;
 scene::IMesh *groundMesh;
@@ -51,11 +52,8 @@ void Map::load(FILE* map) {
 
 void Map::load_textures() {
 	io::path path;
-	char* selname = new char[10];
 	video::ITexture* active;
-	video::ITexture* active_selected;
 	unsigned char* texData;
-	unsigned char* texData_sel;
 	unsigned int pix;
 	for (unsigned i = 0; i < sizeof(texture_names)/sizeof(std::string); i++) {
 		path = ("data/textures/tile/" + texture_names[i] + ".png").c_str();
@@ -63,31 +61,14 @@ void Map::load_textures() {
 		if (active == NULL) {
 			bork((path + " could not be loaded").c_str());
 		}
-		sprintf(selname, "SEL%i", i);
-		active_selected = driver->addTexture(active->getOriginalSize(), selname, active->getColorFormat());
-		switch(active->getColorFormat()) { // TODO: Fix this bloody mess which doesn't even support colour formats other than ARGB
-			case video::ECF_A8R8G8B8:
-				texData = (unsigned char*) active->lock();
-				texData_sel = (unsigned char*) active_selected->lock();
-				for (pix = 0; pix < active->getOriginalSize().Width * active->getOriginalSize().Height; pix++) {
-					texData_sel[pix*4+0] = ((texData[pix*4+0] + 32) <= 32) ? 255 : texData[pix*4+0] + 32; // B
-					texData_sel[pix*4+1] = texData[pix*4+1]; // G
-					texData_sel[pix*4+2] = texData[pix*4+2]; // R
-					texData_sel[pix*4+3] = texData[pix*4+3]; // A stays what it is
-				}
-				active->unlock();
-				active_selected->unlock();
-				break;
-			default:
-				bork("Unsupported pixel format in last mentioned texture");
-		}
 		tileTextures.push_back(active);
-		tileTextures_sel.push_back(active_selected);
 	}
+
+	selected_tex = driver->getTexture("data/textures/tile/selected.png");
+	unselected_tex = driver->getTexture("data/textures/tile/normal.png");
 
 	wallMesh = smgr->getMesh("data/models/wall.dae");
 	groundMesh = smgr->getMesh("data/models/ground.dae");
-	delete selname; // Yay for leaking 10 bytes of memory before I added this
 }
 
 
@@ -138,7 +119,7 @@ Tile::Tile(Tiledata _data, int _x, int _y) {
 	else {
 		scn = smgr->addMeshSceneNode(groundMesh, 0, ID_SELECTABLE, tilePos);
 	}
-	scn->setMaterialType(video::EMT_SOLID);
+	scn->setMaterialType(video::EMT_LIGHTMAP_ADD);
 	scn->setMaterialFlag(video::EMF_LIGHTING, UserConfig.read<bool>("display.lighting", true));
 	scn->setMaterialFlag(video::EMF_BILINEAR_FILTER, not UserConfig.read<bool>("display.minecraftmode", false)); // Minecraft!
 	scn->setMaterialTexture(0, tileTextures[data.type]);

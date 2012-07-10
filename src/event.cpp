@@ -34,18 +34,20 @@ bool EventReceiver::OnEvent(const SEvent& event)
 			if(event.MouseInput.Event == EMIE_MOUSE_MOVED) {MousePosition.X = event.MouseInput.X; MousePosition.Y = event.MouseInput.Y;}
 			else if (event.MouseInput.Event == EMIE_LMOUSE_PRESSED_DOWN) {
 				if (selected_owner) {
-					if (selected_owner->ownerType == NodeOwner::TYPE_TILE) selected_node->setMaterialTexture(0, tileTextures[selected_owner->tileOwner->data.type]);
+					if (selected_owner->ownerType == NodeOwner::TYPE_TILE) selected_node->setMaterialTexture(1, unselected_tex);
 					if (selected_owner->ownerType == NodeOwner::TYPE_ENTITY) {
-						if (selected_node->getMaterialCount() >= 1) selected_node->getMaterial(0).AmbientColor = 0x000000;
+//						if (selected_node->getMaterialCount() >= 1) selected_node->getMaterial(0).AmbientColor = 0x000000;
+						if (selected_node->getMaterialCount() >= 1) selected_node->setMaterialTexture(1, unselected_tex);
 					}
 				}
 				selected_node = collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, ID_SELECTABLE);
 				if (selected_node) selected_owner = (NodeOwner*) selected_node->getUserData();
 				else selected_owner = NULL;
 				if (selected_owner) {
-					if (selected_owner->ownerType == NodeOwner::TYPE_TILE) selected_node->setMaterialTexture(0, tileTextures_sel[selected_owner->tileOwner->data.type]);
+					if (selected_owner->ownerType == NodeOwner::TYPE_TILE) selected_node->setMaterialTexture(1, selected_tex);
 					if (selected_owner->ownerType == NodeOwner::TYPE_ENTITY) {
-						if (selected_node->getMaterialCount() >= 1) selected_node->getMaterial(0).AmbientColor = 0x00FF00;
+//						if (selected_node->getMaterialCount() >= 1) selected_node->getMaterial(0).AmbientColor = 0x00FF00;
+						if (selected_node->getMaterialCount() >= 1) selected_node->setMaterialTexture(1, selected_tex);
 					}
 				}
 			}
@@ -80,5 +82,5 @@ EventReceiver::~EventReceiver() {}
 
 void setup_GUI() {
 	options = env->addWindow(rect<s32>(0, 0, 500, 75), false, L"Options");
-	GUI_minecraftmode = env->addCheckBox(not UserConfig.read<bool>("display.minecraftmode", false), rect<s32>(10, 30, 100, 40), options, CBOX_ID_MINECRAFT_MODE, L"Minecraft Mode");
+	GUI_minecraftmode = env->addCheckBox(UserConfig.read<bool>("display.minecraftmode", false), rect<s32>(10, 30, 100, 40), options, CBOX_ID_MINECRAFT_MODE, L"Minecraft Mode");
 }

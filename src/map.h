@@ -17,7 +17,8 @@ using irr::core::vector3df;
 #define TILE_SIZE 16
 
 extern std::vector<video::ITexture*> tileTextures;
-extern std::vector<video::ITexture*> tileTextures_sel;
+extern video::ITexture *selected_tex;
+extern video::ITexture *unselected_tex;
 
 extern scene::IMesh *wallMesh;
 extern scene::IMesh *groundMesh;

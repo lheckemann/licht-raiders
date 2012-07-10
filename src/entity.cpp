@@ -14,6 +14,7 @@ Entity::Entity(vector2df origin) {
 	map_position = origin;
 	vector3df globalPos(origin.X*TILE_SIZE, 0, origin.Y*TILE_SIZE);
 	node = smgr->addAnimatedMeshSceneNode(mesh);
+	node->setMaterialType(video::EMT_LIGHTMAP_ADD);
 	node->setPosition(globalPos);
 	NodeOwner *x = new NodeOwner;
 	x->ownerType = NodeOwner::TYPE_ENTITY;
