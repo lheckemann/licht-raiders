@@ -54,7 +54,7 @@ bool EventReceiver::OnEvent(const SEvent& event)
 					scene::ISceneNode *targ = collMan->getSceneNodeFromScreenCoordinatesBB(receiver.MousePosition, ID_SELECTABLE);
 					if (	targ // valid node clicked on
 							and ((NodeOwner*) targ->getUserData())->ownerType == NodeOwner::TYPE_TILE // it was a tile
-							and not tile_is_wall[((NodeOwner*) targ->getUserData())->tileOwner->data.type]) // the entity can actually go there (TODO make this take into account the entitie's abilities)
+							and not tile_is_wall[((NodeOwner*) targ->getUserData())->tileOwner->data.type]) // the entity can actually go there (TODO make this take into account the entity's abilities)
 					{
 						selected_owner->entityOwner->setTarget(((NodeOwner*) targ->getUserData())->tileOwner);
 					}
