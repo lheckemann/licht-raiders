@@ -3,7 +3,7 @@
 All rights reserved.
 
 == About ==
-A fork of the Open Rock Raiders project, created by the community Rock Raiders United (RRU) at http://rockraidersunited.org. I no longer visit this site, and am, other than being a member, affiliated with it in any way.
+A fork of the Open Rock Raiders project, created by the community Rock Raiders United (RRU) at http://rockraidersunited.org. I no longer visit this site, and am not, other than being a member, affiliated with it in any way.
 
 Note that it uses a MODIFIED version of the irrlicht engine - this means that you can *not* use the standard distributions of it.
 
@@ -13,7 +13,8 @@ Building in any non-GNU/Linux system is probably a huge pain. In future, SDKs wi
 You need:
  - C++ compiler etc. compatible with SCons (gcc works just fine)
  - SCons (for SCons, you need python)
- - OpenGL header files (mesa-common-dev in debian)
+ - OpenGL header files (mesa-common-dev in debian and ubuntu)
+ - X11 headers (libx11-dev in debian and ubuntu)
  - SVN commandline client
  - Boost headers
 

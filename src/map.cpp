@@ -65,7 +65,7 @@ void Map::load_textures() {
 		}
 		sprintf(selname, "SEL%i", i);
 		active_selected = driver->addTexture(active->getOriginalSize(), selname, active->getColorFormat());
-		switch(active->getColorFormat()) { // TODO: Implement other colour formats / fix this bloody mess
+		switch(active->getColorFormat()) { // TODO: Fix this bloody mess which doesn't even support colour formats other than ARGB
 			case video::ECF_A8R8G8B8:
 				texData = (unsigned char*) active->lock();
 				texData_sel = (unsigned char*) active_selected->lock();
@@ -87,6 +87,7 @@ void Map::load_textures() {
 
 	wallMesh = smgr->getMesh("data/models/wall.dae");
 	groundMesh = smgr->getMesh("data/models/ground.dae");
+	delete selname; // Yay for leaking 10 bytes of memory before I added this
 }
 
 

@@ -12,7 +12,6 @@
   </asset>
   <library_images>
     <image id="ground_png" name="ground_png">
-      <init_from>ground.png</init_from>
     </image>
   </library_images>
   <library_effects>
