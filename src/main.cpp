@@ -148,7 +148,7 @@ int main() {
 	collMan = smgr->getSceneCollisionManager();
 
 /* Set up GUI */
-	gui::IGUISkin* skin = env->getSkin();
+//	gui::IGUISkin* skin = env->getSkin();
 	setup_GUI();
 
 /* Load controls */

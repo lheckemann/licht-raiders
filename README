@@ -14,7 +14,7 @@ You need:
  - C++ compiler etc. compatible with SCons (gcc works just fine)
  - SCons (for SCons, you need python)
  - OpenGL header files (mesa-common-dev in debian and ubuntu)
- - X11 headers (libx11-dev in debian and ubuntu)
+ - X11 headers (libx11-dev and libxxf86vm-dev in debian and ubuntu)
  - SVN commandline client
  - Boost headers
 

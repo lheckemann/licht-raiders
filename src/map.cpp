@@ -53,8 +53,6 @@ void Map::load(FILE* map) {
 void Map::load_textures() {
 	io::path path;
 	video::ITexture* active;
-	unsigned char* texData;
-	unsigned int pix;
 	for (unsigned i = 0; i < sizeof(texture_names)/sizeof(std::string); i++) {
 		path = ("data/textures/tile/" + texture_names[i] + ".png").c_str();
 		active = driver->getTexture(path);
