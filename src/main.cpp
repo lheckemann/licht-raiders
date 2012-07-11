@@ -140,6 +140,7 @@ int main() {
 	}
 
 	device->setWindowCaption(L"IrrRR");
+	device->setResizable(false);
 
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();

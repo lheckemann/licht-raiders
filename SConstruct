@@ -27,7 +27,8 @@ for lib in LIBS:
 
 env = conf.Finish()
 
-env.Append(CXXFLAGS=['-ggdb', '-g3', '-Wall'])
+env.Append(CXXFLAGS=['-O3', '-fexpensive-optimizations'])
+#env.Append(CXXFLAGS=['-ggdb', '-g3', '-Wall'])
 import os
 if not os.path.isdir("./irrlicht-svn"):
 	print colours['cyan'] + "Irrlicht seems not to be present. Run get_irrlicht.sh if possible." + colours['end']
