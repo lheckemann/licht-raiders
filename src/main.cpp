@@ -98,11 +98,11 @@ IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 std::string get_userdata_path() {
 #ifdef __unix
 	string result ( getenv("HOME") );
-	result += "/.IrrRR/"; // TODO: Is this ok?
+	result += "/.lichtraiders/";
 #else // __unix
 #ifdef __WIN32__
 	string result ( getenv("APPDATA") );
-	result += "\\IrrRR\\";
+	result += "\\lichtraiders\\";
 #endif // __WIN32__
 #endif // __unix
 	return result;
@@ -136,7 +136,7 @@ int main() {
 		printf("Could not create device.\n");
 	}
 
-	device->setWindowCaption(L"IrrRR");
+	device->setWindowCaption(L"Licht Raiders");
 	device->setResizable(false);
 
 	driver = device->getVideoDriver();

@@ -44,7 +44,7 @@ if not os.path.exists("./irrlicht-svn/lib/Linux/libIrrlicht.a"): # TODO adapt to
 	print colours['cyan'] + "Compiling irrlicht seems to have failed." + colours['end']
 	Exit(1)
 else:
-	print colours['cyan'] + "Irrlicht found. Compiling IrrRR." + colours['end']
+	print colours['cyan'] + "Irrlicht found. Compiling Licht Raiders." + colours['end']
 
 # 3. Add it to the path.
 env.Append(LIBPATH=[os.getcwd() + "/irrlicht-svn/lib/Linux"])
