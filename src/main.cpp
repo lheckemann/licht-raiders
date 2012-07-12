@@ -25,11 +25,14 @@ ConfigFile UserConfig;
 
 video::IVideoDriver* driver;
 scene::ISceneManager* smgr;
+gui::IGUIEnvironment* guienv;
 scene::ISceneCollisionManager* collMan;
 
 scene::ISceneNode *selected_node = NULL;
 
 Map *map;
+
+GameState state;
 
 // I couldn't resist, alright? :D
 void bork(std::string msg) {
@@ -92,18 +95,6 @@ IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 	return createDeviceEx(params);
 }
 
-
-struct controls {
-	EKEY_CODE cam_up;
-	EKEY_CODE cam_down;
-	EKEY_CODE cam_left;
-	EKEY_CODE cam_right;
-	EKEY_CODE cam_raise;
-	EKEY_CODE cam_lower;
-	EKEY_CODE cam_rot_cw;
-	EKEY_CODE cam_rot_acw;
-};
-
 std::string get_userdata_path() {
 #ifdef __unix
 	string result ( getenv("HOME") );
@@ -117,7 +108,13 @@ std::string get_userdata_path() {
 	return result;
 }
 
+float camRot = 0, camHeight = 20, camHeightChange = 0;
+vector3df camMove(0, 0, 0);
+float camSpeed;
+
 int main() {
+	state.phase = GameState::PHASE_ENTERING;
+	state.state = GameState::STATE_INGAME; // asdf
 	try {
 		UserConfig = ConfigFile(get_userdata_path() + "user.cfg");
 	}
@@ -144,28 +141,12 @@ int main() {
 
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
-	env = device->getGUIEnvironment();
+	guienv = device->getGUIEnvironment();
 	collMan = smgr->getSceneCollisionManager();
 
 /* Set up GUI */
 //	gui::IGUISkin* skin = env->getSkin();
 	setup_GUI();
-
-/* Load controls */
-
-	controls userControls;
-
-	userControls.cam_up = (EKEY_CODE) UserConfig.read<int>("keys.camera_up", KEY_KEY_W);
-	userControls.cam_down = (EKEY_CODE) UserConfig.read<int>("keys.camera_down", KEY_KEY_S);
-	userControls.cam_left = (EKEY_CODE) UserConfig.read<int>("keys.camera_left", KEY_KEY_A);
-	userControls.cam_right = (EKEY_CODE) UserConfig.read<int>("keys.camera_right", KEY_KEY_D);
-	userControls.cam_raise = (EKEY_CODE) UserConfig.read<int>("keys.camera_raise", KEY_KEY_Q);
-	userControls.cam_lower = (EKEY_CODE) UserConfig.read<int>("keys.camera_lower", KEY_KEY_E);
-	userControls.cam_rot_cw = (EKEY_CODE) UserConfig.read<int>("keys.camera_rot_cw", KEY_KEY_Z);
-	userControls.cam_rot_acw = (EKEY_CODE) UserConfig.read<int>("keys.camera_rot_acw", KEY_KEY_X);
-
-	float camSpeed;
-	camSpeed = UserConfig.read("controls.camSpeed", 2.0f);
 
 /* Set up camera */
 
@@ -175,11 +156,10 @@ int main() {
 	cam->setFarValue(42000.0f);
 	cam->setNearValue(0.0625f);
 
-	vector3df camMove(0, 0, 0);
+	vector3df rotatedCamMove;
+
 	vector3df camPos = cam->getPosition();
 	vector3df camTarget = cam->getTarget();
-	float camRot = 0;
-	float camHeight = 20;
 	vector3df tempVec; // Used for miscellaneous things, just as a temporary vec3df storage
 
 /* Map */
@@ -225,31 +205,14 @@ int main() {
 		if (now >= lastUpdate + 1000.0/MAX_FPS) {
 			frame++;
 			lastUpdate = now;
+
 			driver->beginScene(true, true, SColor(255, 255, 0, 255));
 			smgr->drawAll();
-			env->drawAll();
+			guienv->drawAll();
 			driver->endScene();
 
-			camMove.set(0, 0, 0);
-			if (receiver.IsKeyPressed(userControls.cam_up)) {
-				camMove.X = -camSpeed;
-			}
-			if (receiver.IsKeyPressed(userControls.cam_down)) {
-				camMove.X = camSpeed;
-			}
-			if (receiver.IsKeyPressed(userControls.cam_left)) {
-				camMove.Z = -camSpeed;
-			}
-			if (receiver.IsKeyPressed(userControls.cam_right)) {
-				camMove.Z = camSpeed;
-			}
-			if (receiver.IsKeyPressed(userControls.cam_raise)) {
-				camHeight += camSpeed;
-			}
-			if (receiver.IsKeyPressed(userControls.cam_lower)) {
-				camHeight -= camSpeed;
-			}
-			camMove.rotateXZBy(camRot);
+			rotatedCamMove = camMove;
+			rotatedCamMove.rotateXZBy(camRot);
 			camPos = cam_base->getPosition();
 			camTarget = cam->getTarget();
 			camPos += camMove;
@@ -260,18 +223,11 @@ int main() {
 			camPos.Y = light->getPosition().Y;
 			light->setPosition(camPos);
 			light2->setPosition(camTarget);
-
-			if (receiver.IsKeyPressed(userControls.cam_rot_cw)) {
-				camRot -= 1;
-			}
-			if (receiver.IsKeyPressed(userControls.cam_rot_acw)) {
-				camRot += 1;
-			}
+			camHeight += camHeightChange;
 			tempVec = vector3df(50,camHeight,0);
 			tempVec.rotateXZBy(camRot);
 			cam->setPosition(tempVec);
 
-			if(receiver.IsKeyPressed(KEY_ESCAPE)) break;
 			if(frame % 400 == 0) printf("%i FPS\n", driver->getFPS());
 		}
 		else {
