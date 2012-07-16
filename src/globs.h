@@ -10,29 +10,6 @@
 #define ID_SELECTABLE 0x100 // why that number? Good question, I sure don't remember. But hey, it works.
 #define DEFAULT_ID 0
 
-
-extern EventReceiver receiver;
-extern ConfigFile UserConfig;
-
-extern video::IVideoDriver* driver;
-extern scene::ISceneManager* smgr;
-extern gui::IGUIEnvironment* guienv;
-extern scene::ISceneCollisionManager* collMan;
-
-extern void bork(std::string msg);
-
-extern bool minecraftMode;
-
-extern gui::IGUIWindow* options;
-
-extern scene::ISceneNode* selected_node;
-
-extern Map *map;
-
-extern vector3df camMove;
-extern float camRot, camHeightChange;
-extern float camSpeed;
-
 struct NodeOwner {
 	enum NODE_OWNER_TYPE {
 		TYPE_TILE,
@@ -53,4 +30,28 @@ struct GameState {
 		STATE_INGAME
 	} state;
 };
+
+extern EventReceiver receiver;
+extern ConfigFile UserConfig;
+
+extern video::IVideoDriver* driver;
+extern scene::ISceneManager* smgr;
+extern gui::IGUIEnvironment* guienv;
+extern scene::ISceneCollisionManager* collMan;
+
+extern void bork(std::string msg);
+
+extern bool minecraftMode;
+
+extern gui::IGUIWindow* options;
+
+extern scene::ISceneNode* selected_node;
+extern NodeOwner* selected_owner;
+
+extern Map *map;
+
+extern vector3df camMove;
+extern float camRot, camHeightChange;
+extern float camSpeed;
+
 extern GameState state;

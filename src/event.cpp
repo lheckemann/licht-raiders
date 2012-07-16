@@ -5,15 +5,21 @@
 using namespace irr;
 using namespace io;
 using irr::core::rect;
+using irr::core::vector2di;
 
 //gui::IGUIEnvironment *env;
 gui::IGUIWindow *options;
 gui::IGUICheckBox *GUI_minecraftmode;
+scene::ISceneNode* selected_node = NULL;
+NodeOwner* selected_owner = NULL;
+
 
 bool minecraftMode;
 
-NodeOwner *selected_owner = NULL;
+void select_object(scene::ISceneNode*);
+
 bool EventReceiver::OnEvent(const SEvent& event){
+	scene::ISceneNode* clicked_node;
 	switch(event.EventType) {
 		case EET_KEY_INPUT_EVENT:
 			if (guienv->getFocus() != NULL) return false; // Skip if the event was captured by the GUI
@@ -27,7 +33,11 @@ bool EventReceiver::OnEvent(const SEvent& event){
 			return false;
 
 		case EET_MOUSE_INPUT_EVENT: // TODO Rewrite
-			
+			if (guienv->getFocus() != NULL) return false;
+			clicked_node = collMan->getSceneNodeFromScreenCoordinatesBB(
+					vector2di(event.MouseInput.X, event.MouseInput.Y), 
+					ID_SELECTABLE);
+			if (clicked_node) select_object(clicked_node);
 			return false;
 
 		default: break;
@@ -109,4 +119,18 @@ EventReceiver::~EventReceiver() {}
 void setup_GUI() {
 	options = guienv->addWindow(rect<s32>(0, 0, 500, 75), false, L"Options");
 	GUI_minecraftmode = guienv->addCheckBox(UserConfig.read<bool>("display.minecraftmode", false), rect<s32>(10, 30, 100, 40), options, CBOX_ID_MINECRAFT_MODE, L"Minecraft Mode");
+}
+
+void select_object(scene::ISceneNode* node) {
+	// First, deselect old node...
+	if (selected_node->getMaterialCount() >= 1) selected_node->setMaterialTexture(1, unselected_tex); // Remove visual selection indicator
+	selected_owner = NULL;
+	selected_node = NULL;
+	// Then select the new one
+	if (!node) return; // but only if it is actually one
+	selected_node = node;
+	NodeOwner *owner = (NodeOwner*) node->getUserData();
+//	if (owner->ownerType == NodeOwner::TYPE_ENTITY) {
+		if (selected_node->getMaterialCount() >= 1) selected_node->setMaterialTexture(1, selected_tex); // Visual selection indicator
+//	}
 }

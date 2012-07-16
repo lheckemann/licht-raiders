@@ -28,8 +28,6 @@ scene::ISceneManager* smgr;
 gui::IGUIEnvironment* guienv;
 scene::ISceneCollisionManager* collMan;
 
-scene::ISceneNode *selected_node = NULL;
-
 Map *map;
 
 GameState state;
