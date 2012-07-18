@@ -1,18 +1,15 @@
-Open Rock Raiders: Irr
-======================
+#Open Rock Raiders: Irr
 
 (C) 2011 Linus Heckemann
 All rights reserved.
 
-About
------
+##About
 
 A fork of the Open Rock Raiders project, created by the community Rock Raiders United (RRU) at http://rockraidersunited.org. I no longer visit this site, and am not, other than being a member, affiliated with it in any way.
 
 Note that it uses a MODIFIED version of the irrlicht engine - this means that you can *not* use the standard distributions of it.
 
-Compiling
----------
+##Compiling
 
 Building in any non-GNU/Linux system is probably a huge pain. In future, SDKs will be provided for compiling on other OSes.
 

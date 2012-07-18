@@ -32,12 +32,14 @@ bool EventReceiver::OnEvent(const SEvent& event){
 			handle_GUI(event);
 			return false;
 
-		case EET_MOUSE_INPUT_EVENT: // TODO Rewrite
+		case EET_MOUSE_INPUT_EVENT:
 			if (guienv->getFocus() != NULL) return false;
-			clicked_node = collMan->getSceneNodeFromScreenCoordinatesBB(
-					vector2di(event.MouseInput.X, event.MouseInput.Y), 
-					ID_SELECTABLE);
-			if (clicked_node) select_object(clicked_node);
+			if (event.MouseInput.isLeftPressed()) {
+				clicked_node = collMan->getSceneNodeFromScreenCoordinatesBB(
+						vector2di(event.MouseInput.X, event.MouseInput.Y), 
+						ID_SELECTABLE);
+				if (clicked_node) select_object(clicked_node);
+			}
 			return false;
 
 		default: break;
@@ -123,9 +125,11 @@ void setup_GUI() {
 
 void select_object(scene::ISceneNode* node) {
 	// First, deselect old node...
-	if (selected_node->getMaterialCount() >= 1) selected_node->setMaterialTexture(1, unselected_tex); // Remove visual selection indicator
-	selected_owner = NULL;
-	selected_node = NULL;
+	if (selected_node) { // If there is one
+		if (selected_node->getMaterialCount() >= 1) selected_node->setMaterialTexture(1, unselected_tex); // Remove visual selection indicator
+		selected_owner = NULL;
+		selected_node = NULL;
+	}
 	// Then select the new one
 	if (!node) return; // but only if it is actually one
 	selected_node = node;
