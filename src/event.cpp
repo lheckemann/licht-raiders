@@ -84,7 +84,7 @@ void EventReceiver::handle_key(const SEvent& event) {
 			case KEY_ACTION_MOVE_CAM_BACKWARDS: camMove.X -= camSpeed; break;
 			case KEY_ACTION_MOVE_CAM_UP: camHeightChange -= camSpeed; break;
 			case KEY_ACTION_MOVE_CAM_DOWN: camHeightChange += camSpeed; break;
-			case KEY_ACTION_QUIT: exit(0); // TODO make this display a dialog or whatever
+			case KEY_ACTION_QUIT: state.state = GameState::STATE_NONE; // TODO make this display a dialog or whatever
 			default: break;
 		}
 	}

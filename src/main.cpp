@@ -32,6 +32,10 @@ Map *map;
 
 GameState state;
 
+float camRot = 0, camHeight = 20, camHeightChange = 0;
+vector3df camMove(0, 0, 0);
+float camSpeed;
+
 // I couldn't resist, alright? :D
 void bork(std::string msg) {
 #ifndef BE_POLITE
@@ -41,7 +45,6 @@ void bork(std::string msg) {
 #endif
 	exit(-1);
 }
-
 
 IrrlichtDevice *setupDevice(EventReceiver &receiver, ConfigFile *UserConfig) {
 	SIrrlichtCreationParameters params = SIrrlichtCreationParameters();
@@ -106,10 +109,6 @@ std::string get_userdata_path() {
 	return result;
 }
 
-float camRot = 0, camHeight = 20, camHeightChange = 0;
-vector3df camMove(0, 0, 0);
-float camSpeed;
-
 int main() {
 	state.phase = GameState::PHASE_ENTERING;
 	state.state = GameState::STATE_INGAME; // asdf
@@ -172,7 +171,7 @@ int main() {
 
 /* Set up lighting */
 
-	smgr->setAmbientLight(SColor(0xFFFFFF));
+	smgr->setAmbientLight(SColor(0x404040));
 	scene::ILightSceneNode *light = smgr->addLightSceneNode(0, vector3df(0,30,0), SColor(0xffffff), 160.0f, DEFAULT_ID);
 	scene::ILightSceneNode *light2 = smgr->addLightSceneNode(0, vector3df(0,30,0), SColor(0xffffff), 160.0f, DEFAULT_ID);
 
@@ -189,18 +188,29 @@ int main() {
 	unsigned int lastUpdate = 0;
 	int frame = 0;
 	vector3df mousething;
-//	scene::IMesh *arrowMesh = smgr->addArrowMesh("ITSANARROW", 0xFFFFFF, 0xFF0000);
-//	scene::IMeshSceneNode *mouseNode = smgr->addMeshSceneNode(arrowMesh, 0, DEFAULT_ID); // Put this back once we implement entity movement
-//	mouseNode->setRotation(vector3df(0, 0, 180));
 
 	core::line3df ray;
 	core::triangle3df dummyTri;
 
+	int skips = 0;
+#ifdef DETAILED_PERFORMANCE
+	float average_skips = -1;
+	int max_skips = 0;
+#endif
+	int slowness_count = 0;
 	Entity randomEntity(vector2df(1, 1));
 /* We have liftoff! */
 	while (device->run()) {
 		now = timer->getTime();
 		if (now >= lastUpdate + 1000.0/MAX_FPS) {
+			// Performance data collection
+#ifdef DETAILED_PERFORMANCE
+			average_skips = (average_skips*frame + skips) / (frame+1);
+			if (skips > max_skips) max_skips = skips;
+#endif
+			if (skips == 0) slowness_count++;
+			skips = 0;
+
 			frame++;
 			lastUpdate = now;
 
@@ -226,12 +236,18 @@ int main() {
 			tempVec.rotateXZBy(camRot);
 			cam->setPosition(tempVec);
 
-			if(frame % 400 == 0) printf("%i FPS\n", driver->getFPS());
+			if (frame % 400 == 0) printf("%i FPS\n", driver->getFPS());
+			if (state.state == GameState::STATE_NONE) break;
 		}
 		else {
-			device->sleep(10);
+			device->yield();
+			skips++;
 		}
 	}
 	device->drop();
+	printf("Slowness: %i%%\n", (int) (((float) slowness_count / frame) * 100)); // Cast to get an integer percentage without annoying decimal places
+#ifdef DETAILED_PERFORMANCE
+	printf("Average skips: %f\tMax skips (the higher the better): %i\n", average_skips, max_skips);
+#endif
 	return 0;
 }

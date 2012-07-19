@@ -26,6 +26,7 @@ env = conf.Finish()
 
 #env.Append(CXXFLAGS=['-O3', '-fexpensive-optimizations']) # Optimised builds
 env.Append(CXXFLAGS=['-ggdb', '-g3', '-Wall']) # Debug builds
+env.Append(CPPFLAGS=["-DDETAILED_PERFORMANCE"])
 
 
 # Loads of stuff for irrlicht
